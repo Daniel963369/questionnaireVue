@@ -9,6 +9,8 @@ export default {
             endDate:"",
             key:0,
             quizData:[],
+            perpage:10,
+            currentPage:1
         }
     },
 
@@ -42,19 +44,43 @@ export default {
         this.fetchData();
     },
 
+    computed:{
+        totalPage(){
+            return Math.ceil(this.quizData.length/this.perpage)
+        },
+        pageStart(){
+            return(this.currentPage-1)*this.perpage
+        },
+
+        pageEnd(){
+            return this.currentPage *this.perpage
+        }
+        
+    },
+
     methods:{
             goToQuestion(){
                 this.$router.push('/questionContent')
             },
 
-            fetchData(index){
+            search(){
+                this.fetchData({title:this.title,startDate: this.startDate, endDate: this.finalDate})
+            },
+
+            setPage(page){
+                if(page <= 0 || page > this.totalPage){
+                    return
+                }
+                this.currentPage = page
+            },
+
+            fetchData(){
                 const url = 'http://localhost:8080/api/quiz/search';
             // 要帶入的值
             const queryParams = {
             title: "",
             startDate:null,
             endDate:null,
-            
             };
             
             const filteredParams = Object.fromEntries(Object.entries(queryParams).filter(([_, v]) => v !== null && v !== undefined));
@@ -73,22 +99,16 @@ export default {
             .then((res) => res.json())
             .catch((error) => console.error("Error:", error))
             .then((response) => {
-                this.quizData = response;
+                this.quizData = response.quizVoList;
                 console.log(this.quizData);
-
-                this.key =  index
-
-                this.qnId = response.quizVoList[this.key].questionnaire.id
-
-                this.qTitle = response.quizVoList[this.key].questionnaire.title
-
-                this.published = response.quizVoList[this.key].questionnaire.description
-
-                this.startDate = response.quizVoList[this.key].questionnaire.startDate
-
-                this.endDate = response.quizVoList[0].questionnaire.endDate
-
-
+                this.quizData.forEach((quiz) => {
+                    this.qnId = quiz.questionnaire.id;
+                    this.qTitle = quiz.questionnaire.title;
+                    this.published = quiz.questionnaire.description;
+                    this.startDate = quiz.questionnaire.startDate;
+                    this.endDate = quiz.questionnaire.endDate;
+                });
+            
             });
             }
         }
@@ -114,7 +134,7 @@ export default {
             <p>開始 / 結束</p>
             <input type="date" id="startDate">
             <input type="date" id="finalDate">
-            <button type="button">搜尋</button>
+            <button type="button" @click="search">搜尋</button>
         </div>
     </div>
 
@@ -128,25 +148,34 @@ export default {
                 <td>結束時間</td>
                 <td>觀看統計</td>
             </tr>
-            <tr v-for="(quiz,index) in quizData" :key="index">
-                <td>{{ quiz.qnId }}</td>
-                <td @click="goToQuestion">{{ quiz.qTitle }}</td>
-                <td>{{ quiz.published}}</td>
-                <td>{{ quiz.startDate }}</td>
-                <td>{{ quiz.endDate }}</td>
+            <tr v-for="(quiz,index) in quizData.slice(pageStart,pageEnd)" :key="index">
+                <td>{{ quiz.questionnaire.id }}</td>
+                <td @click="goToQuestion">{{ quiz.questionnaire.title }}</td>
+                <td>{{ quiz.questionnaire.published}}</td>
+                <td>{{ quiz.questionnaire.startDate }}</td>
+                <td>{{ quiz.questionnaire.endDate }}</td>
                 <td>{{ "前往觀看" }}</td>
             </tr>
         </table>
     </div>
 
     <div class="page">
-        <div class="icon">
-            <i class="fa-solid fa-angles-left"></i>
-            <i class="fa-solid fa-angle-left"></i>
-            <p>1</p>
-            <i class="fa-solid fa-chevron-right"></i>
-            <i class="fa-solid fa-angles-right"></i>
-        </div>
+<div class="pagination">
+<div class="page-item" @click.prevent="setPage(currentPage-1)">
+    <a class="page-link" href="#" aria-label="Previous">
+      <span aria-hidden="true">&laquo;</span>
+    </a>
+</div>
+  <div class="page-item" :class="{'active': (currentPage === (n))}"
+  v-for="(n, index) in totalPage" :key="index" @click.prevent="setPage(n)">
+    <a class="page-link" href="#">{{ n }}</a>
+</div>
+  <div class="page-item" @click.prevent="setPage(currentPage+1)">
+    <a class="page-link" href="#" aria-label="Next">
+      <span aria-hidden="true">&raquo;</span>
+    </a>
+</div>
+</div>
     </div>
 
     <div class="buttonZone">
