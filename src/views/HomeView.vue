@@ -7,6 +7,7 @@ export default {
             published:"",
             startDate:"",
             endDate:"",
+            key:0,
             quizData:[],
         }
     },
@@ -46,7 +47,7 @@ export default {
                 this.$router.push('/questionContent')
             },
 
-            fetchData(){
+            fetchData(index){
                 const url = 'http://localhost:8080/api/quiz/search';
             // 要帶入的值
             const queryParams = {
@@ -75,14 +76,15 @@ export default {
                 this.quizData = response;
                 console.log(this.quizData);
 
+                this.key =  index
 
-                this.qnId = response.quizVoList[0].questionnaire.id
+                this.qnId = response.quizVoList[this.key].questionnaire.id
 
-                this.qTitle = response.quizVoList[0].questionnaire.title
+                this.qTitle = response.quizVoList[this.key].questionnaire.title
 
-                this.published = response.quizVoList[0].questionnaire.description
+                this.published = response.quizVoList[this.key].questionnaire.description
 
-                this.startDate = response.quizVoList[0].questionnaire.startDate
+                this.startDate = response.quizVoList[this.key].questionnaire.startDate
 
                 this.endDate = response.quizVoList[0].questionnaire.endDate
 
@@ -127,11 +129,11 @@ export default {
                 <td>觀看統計</td>
             </tr>
             <tr v-for="(quiz,index) in quizData" :key="index">
-                <td>{{ qnId }}</td>
-                <td @click="goToQuestion">{{ qTitle }}</td>
-                <td>{{ published}}</td>
-                <td>{{ startDate }}</td>
-                <td>{{ endDate }}</td>
+                <td>{{ quiz.qnId }}</td>
+                <td @click="goToQuestion">{{ quiz.qTitle }}</td>
+                <td>{{ quiz.published}}</td>
+                <td>{{ quiz.startDate }}</td>
+                <td>{{ quiz.endDate }}</td>
                 <td>{{ "前往觀看" }}</td>
             </tr>
         </table>
