@@ -10,7 +10,10 @@ export default {
             key:0,
             quizData:[],
             perpage:10,
-            currentPage:1
+            currentPage:1,
+
+            searchName:"",
+            
         }
     },
 
@@ -64,7 +67,7 @@ export default {
             },
 
             search(){
-                this.fetchData({title:this.title,startDate: this.startDate, endDate: this.finalDate})
+                this.fetchData({title:this.title,startDate: this.startDate, endDate: this.endDate})
             },
 
             setPage(page){
@@ -78,9 +81,9 @@ export default {
                 const url = 'http://localhost:8080/api/quiz/search';
             // 要帶入的值
             const queryParams = {
-            title: "",
-            startDate:null,
-            endDate:null,
+            title:this.searchName,
+            startDate:"",
+            endDate:"",
             };
             
             const filteredParams = Object.fromEntries(Object.entries(queryParams).filter(([_, v]) => v !== null && v !== undefined));
@@ -128,7 +131,7 @@ export default {
     <div class="questionHeader">
         <div class="questionTitle">
             <p>問卷標題</p>
-            <input type="text">
+            <input type="text" v-model="searchName" >
         </div>
         <div class="questionTime">
             <p>開始 / 結束</p>
