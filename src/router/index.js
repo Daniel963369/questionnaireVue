@@ -24,6 +24,24 @@ const router = createRouter({
       name: 'questionflow',
       component: () =>import('../components/questionflow.vue')
     },
+
+    {
+      path: '/HomeViewBack',
+      name: 'HomeViewBack',
+      component: () =>import('../views/HomeViewBack.vue')
+    },
+
+    {
+      path: '/addPage',
+      name: 'addPage',
+      component: () =>import('../views/addPage.vue')
+    },
+
+    {
+      path: '/addPageQu',
+      name: 'addPageQu',
+      component: () =>import('../views/addPageQu.vue')
+    },
   ]
 })
 

@@ -3,6 +3,13 @@ import questionflow from '../components/questionflow.vue';
 export default {
     data(){
         return{
+            qTitle:"",
+            optionType:"",
+            isNecessary:"",
+            qOption:"",
+            key:0,
+
+            quizData:[],
             vote:{
                 number:"001",
                 title:"最強本土劇演員票選",
@@ -18,6 +25,11 @@ export default {
             controlPage:0,
         }
     },
+
+    mounted(){
+        this.fetchData();
+    },
+
     components:{
         questionflow
     },
@@ -25,6 +37,44 @@ export default {
         toFlowPage(){
             this.controlPage = 1
         },
+
+        fetchData(){
+            const url = 'http://localhost:8080/api/quiz/search';
+            // 要帶入的值
+            const queryParams = {
+            title:this.searchName,
+            startDate:"",
+            endDate:"",
+            };
+            
+            const filteredParams = Object.fromEntries(Object.entries(queryParams).filter(([_, v]) => v !== null && v !== undefined));
+
+            const queryParamsString = new URLSearchParams(filteredParams).toString();
+
+            // 將查詢字串附加到 URL
+            const urlWithParams = `${url}?${queryParamsString}`;
+
+            fetch(urlWithParams, {
+            method: "GET", 
+            headers: new Headers({
+                "Content-Type": "application/json",
+            }),
+            })
+            .then((res) => res.json())
+            .catch((error) => console.error("Error:", error))
+            .then((response) => {
+                this.quizData = response.quizVoList;
+                console.log(this.quizData);
+                this.quizData.forEach((quiz) => {
+                    this.qTitle = quiz.question_list[0].qTitle
+                    this.optionType = quiz.question_list[0].optionType
+                    this.isNecessary = quiz.question_list[0].necessary
+                    this.qOption = quiz.question_list[0].option
+                    console.log(this.qOption)
+                });
+            
+            });
+        }
     }
 }
 
@@ -34,11 +84,11 @@ export default {
 <template>
 <div class="body" v-if="controlPage == 0">
     <div class="voteDate">
-        <time datetime="2023/10/31">{{ nowTime }}</time>
+        <time datetime="2023/10/31">{{  }}</time>
         <time datetime="2023/11/07">202311/07</time>
     </div>
     <div class="designTitle">
-        <h1>{{vote.title}}</h1>
+        <h1>{{qTitle}}</h1>
     </div>
 
     <div class="designDescription">
@@ -69,28 +119,17 @@ export default {
     <div class="voteZone">
         <p>請投給以下一位</p>
             <div class="voteRadio">
-            <div class="N1">
-                <input type="radio" value="劉文聰" v-model="personInformation.radioValue">
-                <label for="">劉文聰</label>
-            </div>
-            <div class="N2">
-                <input type="radio" value="黃志中" v-model="personInformation.radioValue">
-                <label for="">黃志中</label>
-            </div>
-            <div class="N3">
-                <input type="radio" value="葉美琪" v-model="personInformation.radioValue">
-                <label for="">葉美琪</label>
-            </div>
-            <div class="N4">
-                <input type="radio" value="黃志龍" v-model="personInformation.radioValue">
-                <label for="">黃志龍</label>
-            </div>
+                <div v-for="(option,index) in qOption" :key="index">
+                    <input type="radio" :value="option" v-model="personInformation.radioValue">
+                    <label>{{ option }}</label>
+                </div>
         </div>
     </div>
 
     <div class="btn">
         <button type="button" class="cancelBtn">取消</button>
         <button type="button" class="checkBtn" @click="toFlowPage">送出</button>
+        <button type="button" @click="fetchData">印出資料</button>
     </div>
 </div>
 

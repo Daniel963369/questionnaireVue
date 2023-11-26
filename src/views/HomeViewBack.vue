@@ -9,6 +9,7 @@ export default {
             endDate:"",
             key:0,
             quizData:[],
+            indexArr:[],
             perpage:10,
             currentPage:1,
 
@@ -30,20 +31,20 @@ export default {
         startDate.value = defaultDate
 
 
-        const finalDate = document.getElementById("finalDate")
-        var plusDate =new Date().getDate()
-        const sevenDate =new Date().setDate(plusDate + 7)
-        const sevenDatetime = new Date(sevenDate)
+        // const finalDate = document.getElementById("finalDate")
+        // var plusDate =new Date().getDate()
+        // const sevenDate =new Date().setDate(plusDate + 7)
+        // const sevenDatetime = new Date(sevenDate)
 
 
 
-        const todayAfterSeven =sevenDatetime.toLocaleString(undefined,day).slice(0,-1)
-        const tomonthAfterSeven =sevenDatetime.toLocaleString(undefined,month).slice(0,-1)
-        const toyearAfterSeven =sevenDatetime.toLocaleString(undefined,year).slice(0,-1)
-        const defaultDateAfterSeven = [toyearAfterSeven,tomonthAfterSeven,todayAfterSeven].join('-')
-        console.log(defaultDateAfterSeven)
-        finalDate.value = defaultDateAfterSeven
-        console.log(finalDate.value)
+        // const todayAfterSeven =sevenDatetime.toLocaleString(undefined,day).slice(0,-1)
+        // const tomonthAfterSeven =sevenDatetime.toLocaleString(undefined,month).slice(0,-1)
+        // const toyearAfterSeven =sevenDatetime.toLocaleString(undefined,year).slice(0,-1)
+        // const defaultDateAfterSeven = [toyearAfterSeven,tomonthAfterSeven,todayAfterSeven].join('-')
+        // console.log(defaultDateAfterSeven)
+        // finalDate.value = defaultDateAfterSeven
+        // console.log(finalDate.value)
         this.fetchData();
     },
 
@@ -62,16 +63,18 @@ export default {
     },
 
     methods:{
+
+
+            goToAddPage(){
+                this.$router.push('/addPage')
+            },
+
             goToQuestion(){
                 this.$router.push('/questionContent')
             },
 
-            goToBack(){
-                this.$router.push('./HomeViewBack')
-            },
-
             search(){
-                this.fetchData({title:this.title,startDate: this.startDate, endDate: this.endDate})
+                this.fetchData({title:this.searchName,startDate: this.startDate, endDate: this.endDate})
             },
 
             setPage(page){
@@ -80,6 +83,7 @@ export default {
                 }
                 this.currentPage = page
             },
+
 
             fetchData(){
                 const url = 'http://localhost:8080/api/quiz/search';
@@ -115,12 +119,111 @@ export default {
                     this.startDate = quiz.questionnaire.startDate;
                     this.endDate = quiz.questionnaire.endDate;
                 });
-            
             });
-            }
-        }
+            },
 
-}
+        //     deleteData(){
+        //         const deleteUrl = 'http://localhost:8080/api/quiz/deleteQuestionnaire';
+        //         const quizIdDelete = this.qnId;
+
+        //     fetch(`${deleteUrl}/${quizIdDelete}`, {
+        //         method: "POST",
+        //         mode: "cors", // 添加 CORS 設置
+        //         headers: new Headers({
+        //             "Content-Type": "application/json",
+        //         }),
+        //     })
+
+
+        //     .then((res) => {
+        //         if (!res.ok) {
+        //             throw new Error(`HTTP error! Status: ${res.status}`);
+        //         }
+        //         return res.json();
+        //     })
+        //     .then((data) => {
+        //         console.log("Quiz deleted successfully", data);
+        //         this.fetchData(); // 刪除成功後重新加載數據
+        //     })
+        //     .catch((error) => {
+        //         console.error("Error:", error);
+        //     });
+        // },
+
+        deleteQn() {
+            //終止方法的可愛變數
+            let stopDel=false;
+            // 後端需要的qnidList
+            var data = [
+                
+            ];
+            //前端要得索引值
+            var data1 = [
+                
+            ];
+        
+
+            // 判斷我要去刪掉陣列問卷的哪幾個
+            for (let i = 0; i < this.indexArr.length; i++) {
+                let indexNum = 0;
+                let bigNum =this.indexArr[i].currentPage
+                let smallNum =  this.indexArr[i].index
+                
+                indexNum = this.perpage*(bigNum-1)+smallNum
+                data1.push(indexNum)
+                data.push(this.quizData[indexNum].qnId)
+            }
+            console.log(data1);
+
+
+            //判斷這幾個裡面有沒有已經出版在進行中的資料
+            for(let w = 0; w<data1.length ; w++){
+                const SSdate = new Date(this.quizData[data1[w]].startDate);
+                const NNdate = new Date(this.nowday);
+                if(this.quizData[data1[w]].published == true && NNdate>=SSdate){
+                    stopDel=true;
+                    alert("你刪除的問卷當中有包含已開始的問卷所以禁止刪除");
+                    return stopDel;
+                }
+            };
+
+            
+            if(stopDel){
+                alert("當中包含已出版且已經開始的問卷")
+                this.indexArr=[];
+                return 
+            }
+              // 抓到當中有出版的直接終止掉-----------------------------------------------------------------
+
+            
+
+            //把前端的資料刪掉
+            // for(let i = 0; i < this.quizData.length; i++){
+            //         for(let k = 0; k < data.length; k++){
+            //         if(this.quizData[i].qnId==data[k]){
+            //             this.quizData.splice(i,1)
+            //         }
+                    
+            //     }
+            // }
+            this.quizData = this.quizData.filter((quiz) => !data.includes(quiz.qnId));
+
+            //前往後端刪資料
+            var url = "http://localhost:8080/api/quiz/deleteQuestionnaire";
+            fetch(url, {
+            method: "POST", // or 'PUT'
+            body: JSON.stringify(data), // data can be string or {object}!
+            headers: new Headers({
+                "Content-Type": "application/json",
+            }),
+            })
+            .then((res) => res.json())
+            .catch((error) => console.error("Error:", error))
+            .then((response) => console.log("Success:", response));
+            this.indexArr=[];
+        },
+            },
+        }
 </script>
 
 <template>
@@ -145,6 +248,11 @@ export default {
         </div>
     </div>
 
+    <div class="iconZone">
+        <i class="fa-solid fa-trash" @click="deleteQn"></i>
+        <i class="fa-solid fa-plus" @click="goToAddPage"></i>
+    </div>
+
     <div class="blockContent">
         <table>
             <tr>
@@ -156,6 +264,7 @@ export default {
                 <td>觀看統計</td>
             </tr>
             <tr v-for="(quiz,index) in quizData.slice(pageStart,pageEnd)" :key="index">
+                <input type="checkbox">
                 <td>{{ quiz.questionnaire.id }}</td>
                 <td @click="goToQuestion">{{ quiz.questionnaire.title }}</td>
                 <td>{{ quiz.questionnaire.published}}</td>
@@ -164,8 +273,6 @@ export default {
                 <td>{{ "前往觀看" }}</td>
             </tr>
         </table>
-
-        <button type="button" @click="goToBack">前往後台</button>
     </div>
 
     <div class="page">
@@ -187,7 +294,9 @@ export default {
 </div>
     </div>
 
-
+    <div class="buttonZone">
+        <button type="button" @click="fetchData">印出資料</button>
+    </div>
 </div>
 
 
@@ -287,6 +396,19 @@ export default {
     }
 }
 
+.iconZone{
+    display:flex;
+    font-size:24pt;
+    margin-top:2%;
+    margin-left:5%;
+    position:relative;
+
+    .fa-plus{
+        left:2%;
+        position:absolute;
+        cursor:pointer;
+    }
+}
 
 .blockContent{
         width:90vw;
