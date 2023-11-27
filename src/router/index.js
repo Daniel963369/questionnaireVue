@@ -37,11 +37,6 @@ const router = createRouter({
       component: () =>import('../views/addPage.vue')
     },
 
-    {
-      path: '/addPageQu',
-      name: 'addPageQu',
-      component: () =>import('../views/addPageQu.vue')
-    },
   ]
 })
 
