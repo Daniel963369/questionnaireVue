@@ -66,10 +66,7 @@
 
                 catchIndex(index){
                     const globalIndex = (this.currentPage-1)*10 +index
-                    console.log(globalIndex)
-                    console.log(this.quizData[globalIndex].questionnaire)
-                    console.log(this.quizData[globalIndex].questionnaire.id)
-                    this.indexArr.push(this.quizData[globalIndex].questionnaire.id)
+                    this.indexArr.push(this.quizData[globalIndex].questionnaire.id,this.currentPage,index)
                     console.log(this.indexArr)
                     console.log(this.quizData)
                     
@@ -178,9 +175,11 @@
                     let bigNum =this.indexArr[i].currentPage
                     let smallNum =  this.indexArr[i].index
                     indexNum = this.perpage*(bigNum-1)+smallNum
-                    // data1.push(indexNum)
-                    data.push(this.quizData[indexNum])
+                    data1.push(indexNum)
+                    data.push(this.quizData[indexNum].id)
                 }
+                console.log(data)
+                console.log(data1)
 
 
                 // //判斷這幾個裡面有沒有已經出版在進行中的資料
@@ -213,6 +212,8 @@
                         
                     }
                 }
+                // this.quizData = this.quizData.filter((quiz) => !data.includes(quiz));
+                // this.$forceUpdate();
                 // this.quizData = this.quizData.filter((quiz) => !data.includes(quiz.qnId));
 
                 //前往後端刪資料
@@ -226,6 +227,7 @@
                 })
                 .then((res) => res.json())
                 .then((response) => console.log("Success:", response));
+                this.fetchData();
                 this.indexArr=[];
 
                 this.fetchData();
