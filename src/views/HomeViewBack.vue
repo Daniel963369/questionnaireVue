@@ -2,11 +2,6 @@
     export default {
         data(){
             return{
-                qnId:"",
-                qTitle:"",
-                published:"",
-                startDate:"",
-                endDate:"",
                 key:0,
                 quizData:[],
                 indexArr:[],
@@ -112,13 +107,6 @@
                 .catch((error) => console.error("Error:", error))
                 .then((response) => {
                     this.quizData = response.quizVoList;
-                    this.quizData.forEach((quiz) => {
-                        this.qnId = quiz.questionnaire.id;
-                        this.qTitle = quiz.questionnaire.title;
-                        this.published = quiz.questionnaire.description;
-                        this.startDate = quiz.questionnaire.startDate;
-                        this.endDate = quiz.questionnaire.endDate;
-                    });
                 });
                 },
 
@@ -210,9 +198,8 @@
                 for(let i = 0; i < this.quizData.length; i++){
                         for(let k = 0; k < this.indexArr.length; k++){
                         if(this.quizData[i].questionnaire.id== this.indexArr[k].qnId){
-                            console.log(this.quizData[i].questionnaire.id)
-                            console.log(this.indexArr[k].qnId)
                             console.log(this.quizData)
+                            console.log(this.quizData[i].questionnaire.id)
                             this.quizData.splice(i,1)
                             
                         }
@@ -280,9 +267,9 @@
                     <input type="checkbox" :key="index" @click="catchIndex(index)" v-model="quiz.checked">
                     <td>{{ quiz.questionnaire.id }}</td>
                     <td @click="goToQuestion">{{ quiz.questionnaire.title }}</td>
-                    <td>{{ quiz.questionnaire.published}}</td>
+                    <td>{{ quiz.questionnaire.published }}</td>
                     <td>{{ quiz.questionnaire.startDate }}</td>
-                    <td>{{ quiz.questionnaire.endDate }}</td>
+                    <td>{{ quiz.questionnaire.endDate}}</td>
                     <td>{{ "前往觀看" }}</td>
                 </tr>
             </table>
@@ -307,9 +294,6 @@
     </div>
         </div>
 
-        <div class="buttonZone">
-            <button type="button" @click="fetchData">印出資料</button>
-        </div>
     </div>
 
 
