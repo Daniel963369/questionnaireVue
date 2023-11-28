@@ -12,12 +12,13 @@
                 indexArr:[],
                 perpage:10,
                 currentPage:1,
-
                 searchName:"",
                 
             }
         },
+        created(){
 
+        },
         mounted(){
             const startDate = document.getElementById("startDate")
             const currentDate = new Date()
@@ -47,6 +48,7 @@
             // console.log(finalDate.value)
             this.fetchData();
         },
+        
 
         computed:{
             totalPage(){
@@ -63,14 +65,6 @@
         },
 
         methods:{
-
-                catchIndex(index){
-                    const globalIndex = (this.currentPage-1)*10 +index
-                    this.indexArr.push(this.quizData[globalIndex].questionnaire.id,this.currentPage,index)
-                    console.log(this.indexArr)
-                    console.log(this.quizData)
-                    
-                },
 
                 goToAddPage(){
                     this.$router.push('/addPage')
@@ -128,6 +122,15 @@
                 });
                 },
 
+                
+                catchIndex(index){
+                    var globalIndex = (this.currentPage-1)*10 +index
+                    this.indexArr.push({qnId:this.quizData[globalIndex].questionnaire.id,currentPage:this.currentPage,index:index})
+                    console.log(this.indexArr)
+                    console.log(this.quizData)
+                    
+                },
+
             //     deleteData(){
             //         const deleteUrl = 'http://localhost:8080/api/quiz/deleteQuestionnaire';
             //         const quizIdDelete = this.qnId;
@@ -176,7 +179,7 @@
                     let smallNum =  this.indexArr[i].index
                     indexNum = this.perpage*(bigNum-1)+smallNum
                     data1.push(indexNum)
-                    data.push(this.quizData[indexNum].id)
+                    data.push(this.quizData[indexNum].questionnaire.id)
                 }
                 console.log(data)
                 console.log(data1)
@@ -205,35 +208,34 @@
 
                 // 把前端的資料刪掉
                 for(let i = 0; i < this.quizData.length; i++){
-                        for(let k = 0; k < data.length; k++){
-                        if(this.quizData[i].questionnaire.id==data[k]){
+                        for(let k = 0; k < this.indexArr.length; k++){
+                        if(this.quizData[i].questionnaire.id== this.indexArr[k].qnId){
+                            console.log(this.quizData[i].questionnaire.id)
+                            console.log(this.indexArr[k].qnId)
+                            console.log(this.quizData)
                             this.quizData.splice(i,1)
+                            
                         }
-                        
                     }
                 }
                 // this.quizData = this.quizData.filter((quiz) => !data.includes(quiz));
                 // this.$forceUpdate();
                 // this.quizData = this.quizData.filter((quiz) => !data.includes(quiz.qnId));
 
-                //前往後端刪資料
+                // 前往後端刪資料
                 var url = "http://localhost:8080/api/quiz/deleteQuestionnaire";
                 fetch(url, {
                 method: "POST", // or 'PUT'
                 headers: new Headers({
                     "Content-Type": "application/json",
                 }),
-                body: JSON.stringify(this.indexArr), // data can be string or {object}!
+                body: JSON.stringify(data), // data can be string or {object}!
                 })
                 .then((res) => res.json())
                 .then((response) => console.log("Success:", response));
-                this.fetchData();
-                this.indexArr=[];
-
-                this.fetchData();
-                
             },
                 },
+                
             }
     </script>
 
