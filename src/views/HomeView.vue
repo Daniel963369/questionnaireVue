@@ -11,7 +11,7 @@ export default {
             quizData:[],
             perpage:10,
             currentPage:1,
-
+            currentDate:new Date(),
             searchName:"",
             
         }
@@ -29,21 +29,23 @@ export default {
         const defaultDate =[toyear,tomonth,today].join('-')
         startDate.value = defaultDate
 
-
-        const finalDate = document.getElementById("finalDate")
-        var plusDate =new Date().getDate()
-        const sevenDate =new Date().setDate(plusDate + 7)
-        const sevenDatetime = new Date(sevenDate)
+        this.currentDate =[toyear,tomonth,today].join('-')
 
 
+        // const finalDate = document.getElementById("finalDate")
+        // var plusDate =new Date().getDate()
+        // const sevenDate =new Date().setDate(plusDate + 7)
+        // const sevenDatetime = new Date(sevenDate)
 
-        const todayAfterSeven =sevenDatetime.toLocaleString(undefined,day).slice(0,-1)
-        const tomonthAfterSeven =sevenDatetime.toLocaleString(undefined,month).slice(0,-1)
-        const toyearAfterSeven =sevenDatetime.toLocaleString(undefined,year).slice(0,-1)
-        const defaultDateAfterSeven = [toyearAfterSeven,tomonthAfterSeven,todayAfterSeven].join('-')
-        console.log(defaultDateAfterSeven)
-        finalDate.value = defaultDateAfterSeven
-        console.log(finalDate.value)
+
+
+        // const todayAfterSeven =sevenDatetime.toLocaleString(undefined,day).slice(0,-1)
+        // const tomonthAfterSeven =sevenDatetime.toLocaleString(undefined,month).slice(0,-1)
+        // const toyearAfterSeven =sevenDatetime.toLocaleString(undefined,year).slice(0,-1)
+        // const defaultDateAfterSeven = [toyearAfterSeven,tomonthAfterSeven,todayAfterSeven].join('-')
+        // console.log(defaultDateAfterSeven)
+        // finalDate.value = defaultDateAfterSeven
+        // console.log(finalDate.value)
         this.fetchData();
     },
 
@@ -57,6 +59,13 @@ export default {
 
         pageEnd(){
             return this.currentPage *this.perpage
+        },
+
+        formattedCurrentDate(){
+            const year = this.currentDate.getFullYear();
+            const month = String(this.currentDate.getMonth() + 1).padStart(2, '0'); // 注意月份是从 0 开始的
+            const day = String(this.currentDate.getDate()).padStart(2, '0');
+            return `${year}-${month}-${day}`;
         }
         
     },
@@ -114,6 +123,10 @@ export default {
                     this.published = quiz.questionnaire.description;
                     this.startDate = quiz.questionnaire.startDate;
                     this.endDate = quiz.questionnaire.endDate;
+
+                    console.log(this.startDate)
+                    console.log(this.endDate)
+                    console.log(this.currentDate)
                 });
             
             });
@@ -158,7 +171,11 @@ export default {
             <tr v-for="(quiz,index) in quizData.slice(pageStart,pageEnd)" :key="index">
                 <td>{{ quiz.questionnaire.id }}</td>
                 <td @click="goToQuestion">{{ quiz.questionnaire.title }}</td>
-                <td>{{ quiz.questionnaire.published}}</td>
+                <td>
+                    <span v-if="quiz.questionnaire.startDate > currentDate">尚未開始</span>
+                    <span v-else-if="quiz.questionnaire.startDate < currentDate && currentDate < quiz.questionnaire.endDate">進行中</span>
+                    <span v-else-if="currentDate > quiz.questionnaire.endDate">已結束</span>
+                </td>
                 <td>{{ quiz.questionnaire.startDate }}</td>
                 <td>{{ quiz.questionnaire.endDate }}</td>
                 <td>{{ "前往觀看" }}</td>

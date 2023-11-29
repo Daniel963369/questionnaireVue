@@ -3,17 +3,19 @@ import questionflow from '../components/questionflow.vue';
 export default {
     data(){
         return{
+            qdesp:"",
             qTitle:"",
-            optionType:"",
-            isNecessary:"",
-            qOption:"",
+            qdesp:"",
+            startDate:"",
+            endDate:"",
+            question_list:[
+                {
+                    option: ""
+                }
+            ],
             key:0,
 
             quizData:[],
-            vote:{
-                number:"001",
-                title:"最強本土劇演員票選",
-            },
 
             personInformation:{
                 name:"",
@@ -64,15 +66,14 @@ export default {
             .catch((error) => console.error("Error:", error))
             .then((response) => {
                 this.quizData = response.quizVoList;
-                console.log(this.quizData);
+                console.log(this.quizData)
                 this.quizData.forEach((quiz) => {
-                    this.qTitle = quiz.question_list[0].qTitle
-                    this.optionType = quiz.question_list[0].optionType
-                    this.isNecessary = quiz.question_list[0].necessary
-                    this.qOption = quiz.question_list[0].option
-                    console.log(this.qOption)
+                    this.qTitle = quiz.questionnaire.title;
+                    this.qdesp = quiz.questionnaire.description;
+                    this.startDate = quiz.questionnaire.startDate;
+                    this.endDate = quiz.questionnaire.endDate;
+                    this.question_list.option = quiz.question_list.option
                 });
-            
             });
         }
     }
@@ -84,16 +85,16 @@ export default {
 <template>
 <div class="body" v-if="controlPage == 0">
     <div class="voteDate">
-        <time datetime="2023/10/31">{{  }}</time>
-        <time datetime="2023/11/07">202311/07</time>
+        <time datetime="2023/10/31">{{ startDate + "~" }}</time>
+        <time datetime="2023/11/07">{{ endDate }}</time>
     </div>
     <div class="designTitle">
         <h1>{{qTitle}}</h1>
     </div>
 
     <div class="designDescription">
-        <p>投給你最喜歡的本土劇演員，並為他加油打氣，一個人只有一票。注意請留真實資料，不要洗票喔!</p>
-        <p>活動完成後，會送出小禮物，屆時將進行公平抽獎，所以記得要留EMAIL以及手機。</p>
+
+        <p>{{qdesp}}</p>
     </div>
 
     <div class="information">
@@ -118,10 +119,10 @@ export default {
 
     <div class="voteZone">
         <p>請投給以下一位</p>
-            <div class="voteRadio">
-                <div v-for="(option,index) in qOption" :key="index">
-                    <input type="radio" :value="option" v-model="personInformation.radioValue">
-                    <label>{{ option }}</label>
+        <div class="voteRadio">
+                <div v-for="(qoption,index) in question_list.option" :key="index">
+                    <input type="radio" :value="qoption">
+                    <label>{{ qoption }}</label>
                 </div>
         </div>
     </div>

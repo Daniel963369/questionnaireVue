@@ -8,7 +8,7 @@
                 perpage:10,
                 currentPage:1,
                 searchName:"",
-                
+                currentDate:new Date(),
             }
         },
         created(){
@@ -25,7 +25,7 @@
             const toyear = currentDate.toLocaleString(undefined,year).slice(0,-1)
             const defaultDate =[toyear,tomonth,today].join('-')
             startDate.value = defaultDate
-
+            this.currentDate =[toyear,tomonth,today].join('-')
 
             // const finalDate = document.getElementById("finalDate")
             // var plusDate =new Date().getDate()
@@ -267,7 +267,11 @@
                     <input type="checkbox" :key="index" @click="catchIndex(index)" v-model="quiz.checked">
                     <td>{{ quiz.questionnaire.id }}</td>
                     <td @click="goToQuestion">{{ quiz.questionnaire.title }}</td>
-                    <td>{{ quiz.questionnaire.published }}</td>
+                    <td>
+                        <span v-if="quiz.questionnaire.startDate > currentDate">尚未開始</span>
+                        <span v-else-if="quiz.questionnaire.startDate < currentDate && currentDate < quiz.questionnaire.endDate">進行中</span>
+                        <span v-else-if="currentDate > quiz.questionnaire.endDate">已結束</span>
+                    </td>
                     <td>{{ quiz.questionnaire.startDate }}</td>
                     <td>{{ quiz.questionnaire.endDate}}</td>
                     <td>{{ "前往觀看" }}</td>
@@ -293,11 +297,7 @@
     </div>
     </div>
         </div>
-
     </div>
-
-
-
 
     </template>
 

@@ -34,7 +34,13 @@ const router = createRouter({
     {
       path: '/addPage',
       name: 'addPage',
-      component: () =>import('../views/addPage.vue')
+      component: () =>import('../views/addQuestionnairePage.vue')
+    },
+
+    {
+      path: '/HomeView',
+      name: 'HomeView',
+      component: () =>import('../views/HomeView.vue')
     },
 
   ]
