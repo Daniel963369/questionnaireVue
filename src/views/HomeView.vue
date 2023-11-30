@@ -13,6 +13,8 @@ export default {
             currentPage:1,
             currentDate:new Date(),
             searchName:"",
+            searchStartDate:"",
+            searchEndDate:"",
             page:0,
             question:[],
 
@@ -72,12 +74,7 @@ export default {
             return this.currentPage *this.perpage
         },
 
-        formattedCurrentDate(){
-            const year = this.currentDate.getFullYear();
-            const month = String(this.currentDate.getMonth() + 1).padStart(2, '0'); // 注意月份是从 0 开始的
-            const day = String(this.currentDate.getDate()).padStart(2, '0');
-            return `${year}-${month}-${day}`;
-        }
+
         
     },
 
@@ -88,6 +85,10 @@ export default {
             },
             goToCheckPage(){
                 this.page = 2
+            },
+
+            search(){
+                    this.fetchData({title:this.searchName,startDate: this.startDate, endDate: this.endDate})
             },
 
             goToQuestion(){
@@ -112,8 +113,8 @@ export default {
             // 要帶入的值
             const queryParams = {
             title:this.searchName,
-            startDate:"",
-            endDate:"",
+            startDate:this.searchStartDate,
+            endDate:this.searchEndDate,
             };
             
             const filteredParams = Object.fromEntries(Object.entries(queryParams).filter(([_, v]) => v !== null && v !== undefined));
@@ -165,8 +166,8 @@ export default {
         </div>
         <div class="questionTime">
             <p>開始 / 結束</p>
-            <input type="date" id="startDate">
-            <input type="date" id="finalDate">
+            <input type="date" id="startDate" v-model="searchStartDate">
+            <input type="date" id="finalDate" v-model="searchEndDate">
             <button type="button" @click="search">搜尋</button>
         </div>
     </div>
