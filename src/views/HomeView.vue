@@ -79,9 +79,6 @@ export default {
                 this.$router.push('./HomeViewBack')
             },
 
-            search(){
-                this.fetchData({title:this.title,startDate: this.startDate, endDate: this.endDate})
-            },
 
             setPage(page){
                 if(page <= 0 || page > this.totalPage){
@@ -116,23 +113,12 @@ export default {
             .catch((error) => console.error("Error:", error))
             .then((response) => {
                 this.quizData = response.quizVoList;
-                console.log(response)
                 console.log(this.quizData);
-                this.quizData.forEach((quiz) => {
-                    this.qnId = quiz.questionnaire.id;
-                    this.qTitle = quiz.questionnaire.title;
-                    this.published = quiz.questionnaire.description;
-                    this.startDate = quiz.questionnaire.startDate;
-                    this.endDate = quiz.questionnaire.endDate;
 
-                });
             
             });
             }
     },
-    updated(){
-        console.log(this.quizData)
-    }
 
 }
 </script>
