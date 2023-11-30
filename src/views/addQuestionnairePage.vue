@@ -57,7 +57,6 @@ export default{
         // console.log(defaultDateAfterSeven)
         // finalDate.value = defaultDateAfterSeven
         // console.log(finalDate.value)
-        this.fetchData();
     },
 
 
@@ -331,6 +330,8 @@ export default{
     </div>
 
 </div>
+
+
 
 </template>
 

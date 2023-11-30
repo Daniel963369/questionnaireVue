@@ -40,6 +40,12 @@ const router = createRouter({
       component: () =>import('../views/answerPage.vue')
     },
 
+    {
+      path: '/questionContent',
+      name: 'questionContent',
+      component: () =>import('../views/questionflow.vue')
+    },
+
   ]
 })
 

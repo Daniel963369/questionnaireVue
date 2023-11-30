@@ -13,6 +13,16 @@ export default {
             currentPage:1,
             currentDate:new Date(),
             searchName:"",
+            page:0,
+            question:[],
+
+            personInformation:{
+                name:"",
+                phoneNumber:"",
+                email:"",
+                age:"",
+                radioValue:"",
+            },
             
         }
     },
@@ -72,8 +82,17 @@ export default {
     },
 
     methods:{
+
+            goToHomePage(){
+                this.page = 0
+            },
+            goToCheckPage(){
+                this.page = 2
+            },
+
             goToQuestion(){
-                this.$router.push('/answerPage')
+                
+                this.page = 1
             },
 
             goToBack(){
@@ -115,6 +134,12 @@ export default {
             .then((response) => {
                 this.quizData = response.quizVoList;
                 console.log(this.quizData);
+                const newQuId = this.question.length + 1
+                this.question.push({qnId:newQuId,qTitle:this.quizData[0].question_list.qTitle,optionType:this.quizData[0].question_list.optionType,
+                    isNecessary:this.quizData[0].necessary, option:this.quizData[0].option})
+
+                    console.log(this.question)
+
 
             
             });
@@ -125,7 +150,7 @@ export default {
 </script>
 
 <template>
-<div class="body">
+<div class="body" v-if="page == 0">
     <div class="header">
         <p class="headerTitle">火星村網路投票網</p>
         <div class="membership">
@@ -210,8 +235,143 @@ export default {
 </div>
 </div>
     </div>
+</div>
 
+<div class="answerZone" v-if="page == 1">
+    <div class="checkZone">
+        <div class="checkTimeZone">
+            <div class="checkStartTime">
+                {{ quizData[0].questionnaire.startDate + "~" }}
+            </div>
+            <div class="checkEndTime">
+                {{ quizData[0].questionnaire.endDate }}
+            </div>
+        </div>
+        <div class="checkTitleZone">
+            <p>{{ quizData[0].questionnaire.title }}</p>
+        </div>
 
+        <div class="checkDespZone">
+            <p>{{ quizData[0].questionnaire.description }}</p>
+        </div>
+
+        <div class="information">
+                <div class="name">
+                    <label for="">姓名</label>
+                    <input type="text" placeholder="請填寫姓名" v-model="personInformation.name">
+                </div>
+                <div class="phoneNumber">
+                    <label for="">電話號碼</label>
+                    <input type="text" placeholder="請填寫電話" v-model="personInformation.phoneNumber">
+                </div>
+
+                <div class="mail">
+                    <label for="">Email</label>
+                    <input type="text" placeholder="請填寫E-mail"  v-model="personInformation.email">
+                </div>
+                <div class="age">
+                    <label for="">年齡</label>
+                    <input type="text" placeholder="請填寫年齡" v-model="personInformation.age">
+                </div>
+        </div>
+
+        <div class="voteZone">
+            <div v-for="(voteQuestion,index) in question" :key="index">
+            <div class="voteTitle">
+                <p>{{ voteQuestion.qTitle }}</p>
+                <p>請投給下列選項:</p>
+            </div>
+
+            <div class="voteRadio">
+                <div v-for="(qoption,index) in voteQuestion.option" :key="index">
+                <input type="radio" value="qoption">
+                <label>{{ qoption }}</label>
+                </div>
+            </div>
+        </div>
+            
+        </div>
+
+        <div class="reasonZone">
+            <p>請說明理由</p>
+            <input type="text">
+        </div>
+
+    <div class="checkButtonZone">
+
+        <button type="button" @click="goToCheckPage">送出</button>
+    </div>
+
+    </div>
+
+</div>
+
+<div class="checkAnswerZone" v-if="page == 2">
+    <div class="checkZone1">
+        <div class="checkTimeZone1">
+            <div class="checkStartTime1">
+                {{ quizData[0].questionnaire.startDate + "~" }}
+            </div>
+            <div class="checkEndTime1">
+                {{ quizData[0].questionnaire.endDate }}
+            </div>
+        </div>
+        <div class="checkTitleZone1">
+            <p>{{ quizData[0].questionnaire.title }}</p>
+        </div>
+
+        <div class="checkDespZone1">
+            <p>{{ quizData[0].questionnaire.description }}</p>
+        </div>
+
+        <div class="information1">
+                <div class="name1">
+                    <label for="">姓名</label>
+                    {{personInformation.name}}
+                </div>
+                <div class="phoneNumber1">
+                    <label for="">電話號碼</label>
+                     {{personInformation.phoneNumber}}
+                </div>
+
+                <div class="mail1">
+                    <label for="">Email</label>
+                     {{personInformation.email}}
+                </div>
+                <div class="age1">
+                    <label for="">年齡</label>
+                    {{personInformation.age}}
+                </div>
+        </div>
+
+        <div class="voteZone1">
+            <div v-for="(voteQuestion,index) in question" :key="index">
+            <div class="voteTitle1">
+                <p>{{ voteQuestion.qTitle }}</p>
+                <p>請投給下列選項:</p>
+            </div>
+
+            <div class="voteRadio1">
+                <div v-for="(qoption,index) in voteQuestion.option" :key="index">
+                <input type="radio" value="qoption">
+                <label>{{ qoption }}</label>
+                </div>
+            </div>
+        </div>
+            
+        </div>
+
+        <div class="reasonZone1">
+            <p>請說明理由</p>
+            <input type="text">
+        </div>
+
+    <div class="checkButtonZone">
+
+        <button type="button" @click="goToHomePage">確認並送出</button>
+    </div>
+
+    </div>
 </div>
 
 
@@ -400,4 +560,151 @@ export default {
 }
 
 
+.checkZone{
+    width:100%;
+    height:100%;
+    background-color:palegreen;
+
+    .checkTimeZone{
+        display:flex;
+        border:1px solid black;
+
+        .checkStartTime{
+            margin-left:80%;
+        }
+
+
+    }
+
+    .checkTitleZone{
+        text-align:center;
+        margin-top:1%;
+    }
+
+    .checkDespZone{
+        text-align:center;
+        margin-top:3%;
+    }
+
+    .information{
+        width:100vw;
+        text-align:center;
+        margin-top:2%;
+        
+        .name{
+            margin-bottom:1%;
+        }
+        .phoneNumber{
+            margin-right:2%;
+            margin-bottom:1%;
+        }
+
+        .mail{
+            margin-right:0.5%;
+            margin-bottom:1%;
+        }
+    }
+
+    .voteZone{
+            text-align:center;
+            flex-direction:column;
+            margin-top:5%;
+
+
+            .voteTitle{
+                text-align:center;
+            }
+            .voteRadio{
+                width:100vw;
+                display:flex;
+                flex-direction:column;
+            }
+        }
+
+    .reasonZone{
+        text-align:center;
+        margin-top:2%;
+    }
+
+    .checkButtonZone{
+        margin-left:60%;
+        margin-top:3%;
+    }
+
+}
+
+.checkAnswerZone{
+        .checkZone1{
+        width:100%;
+        height:100%;
+        background-color:palegreen;
+
+        .checkTimeZone1{
+            display:flex;
+            border:1px solid black;
+
+            .checkStartTime1{
+                margin-left:80%;
+            }
+
+
+        }
+
+        .checkTitleZone1{
+            text-align:center;
+            margin-top:1%;
+        }
+
+        .checkDespZone1{
+            text-align:center;
+            margin-top:3%;
+        }
+
+        .information1{
+            width:100vw;
+            text-align:center;
+            margin-top:2%;
+            
+            .name{
+                margin-bottom:1%;
+            }
+            .phoneNumber{
+                margin-right:2%;
+                margin-bottom:1%;
+            }
+
+            .mail{
+                margin-right:0.5%;
+                margin-bottom:1%;
+            }
+        }
+
+        .voteZone1{
+                text-align:center;
+                flex-direction:column;
+                margin-top:5%;
+
+
+                .voteTitle{
+                    text-align:center;
+                }
+                .voteRadio{
+                    width:100vw;
+                    display:flex;
+                    flex-direction:column;
+                }
+            }
+
+        .reasonZone1{
+            text-align:center;
+            margin-top:2%;
+        }
+
+        .checkButtonZone{
+            margin-left:60%;
+            margin-top:3%;
+        }
+    }
+
+}
 </style>
