@@ -34,6 +34,12 @@ const router = createRouter({
       component: () =>import('../views/HomeView.vue')
     },
 
+    {
+      path: '/answerPage',
+      name: 'answerPage',
+      component: () =>import('../views/answerPage.vue')
+    },
+
   ]
 })
 

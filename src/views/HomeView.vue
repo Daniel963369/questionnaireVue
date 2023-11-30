@@ -73,7 +73,7 @@ export default {
 
     methods:{
             goToQuestion(){
-                this.$router.push('/questionContent')
+                this.$router.push('/answerPage')
             },
 
             goToBack(){
@@ -147,8 +147,9 @@ export default {
     </div>
 
     <div class="blockContent">
+        <div class="tableContent">
         <table>
-            <tr>
+            <tr class="headerTr">
                 <td>#</td>
                 <td>問卷</td>
                 <td>狀態</td>
@@ -157,20 +158,36 @@ export default {
                 <td>觀看統計</td>
             </tr>
             <tr v-for="(quiz,index) in quizData.slice(pageStart,pageEnd)" :key="index">
-                <td>{{ quiz.questionnaire.id }}</td>
-                <td @click="goToQuestion">{{ quiz.questionnaire.title }}</td>
+                <div class="ContentTr">
+                <div class="questionnaireId">
+                    <td>{{ quiz.questionnaire.id }}</td>
+                </div>
+                <div class="questionnaireTitle">
+                    <td @click="goToQuestion">{{ quiz.questionnaire.title }}</td>
+                </div>
+        
+
+
                 <td>
-
-                    <span v-if="quiz.questionnaire.startDate > currentDate">尚未開始</span>
-                    <span v-if="currentDate > quiz.questionnaire.endDate">已結束</span>
-                    <span v-else="quiz.questionnaire.startDate < currentDate && currentDate < quiz.questionnaire.endDate">進行中</span>
-
+                    <div class="whetherPublished">
+                        <td v-if="quiz.questionnaire.startDate > currentDate">尚未開始</td>
+                        <td v-if="currentDate > quiz.questionnaire.endDate">已結束</td>
+                        <td v-else="quiz.questionnaire.startDate < currentDate && currentDate < quiz.questionnaire.endDate">進行中</td>
+                    </div>
                 </td>
-                <td>{{ quiz.questionnaire.startDate }}</td>
-                <td>{{ quiz.questionnaire.endDate }}</td>
-                <td>{{ "前往觀看" }}</td>
+                <div class="questionnaireStartDate">
+                    <td>{{ quiz.questionnaire.startDate }}</td>
+                </div>
+                <div class="questionnaireEndDate">
+                    <td>{{ quiz.questionnaire.endDate }}</td>
+                </div>
+                <div class="questionnaireView">
+                    <td>{{ "前往觀看" }}</td>
+                </div>
+            </div>
             </tr>
         </table>
+    </div>
 
         <button type="button" @click="goToBack">前往後台</button>
     </div>
@@ -302,20 +319,57 @@ export default {
         margin-top:3%;
 
 
-        table{
+        
+        .tableContent{
 
-        tr{
-            width:90vw;
-            display:flex;
-            justify-content:space-around;
-            border:1px solid black;
-
-            td{
-                cursor:pointer;
+            .headerTr{
+                display:flex;
+                border:1px solid black;
+                width:90vw;
+                justify-content:space-around;
                 color:blue;
                 
             }
-        }
+
+            .ContentTr{
+                border:3px solid palevioletred;
+                margin-top:1%;
+                display:flex;
+                position:relative;
+
+                .questionnaireId{
+                    color:blue;
+                    margin-left:6%;
+                }
+
+                .questionnaireTitle{
+                    color:blue;
+                    margin-left:9%;
+                    
+                }
+
+                .whetherPublished{
+                    position:relative;
+                    left:270%;
+                    color:blue;
+                    
+                }
+
+                .questionnaireStartDate{
+                    color:blue;
+                    margin-left:22%;
+                }
+
+                .questionnaireEndDate{
+                    color:blue;
+                    margin-left:12%;
+                }
+
+                .questionnaireView{
+                    color:blue;
+                    margin-left:12%;
+                }
+            }
 
         }
     }

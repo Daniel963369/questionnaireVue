@@ -256,8 +256,9 @@
         </div>
 
         <div class="blockContent">
+            <div class="tableContent">
             <table>
-                <tr>
+                <tr class="headerTr">
                     <td>#</td>
                     <td>問卷</td>
                     <td>狀態</td>
@@ -266,19 +267,37 @@
                     <td>觀看統計</td>
                 </tr>
                 <tr v-for="(quiz,index) in quizData.slice(pageStart,pageEnd)" :key="index">
-                    <input type="checkbox" :key="index" @click="catchIndex(index)" v-model="quiz.checked">
-                    <td>{{ quiz.questionnaire.id }}</td>
-                    <td @click="goToQuestion">{{ quiz.questionnaire.title }}</td>
+                    <div class="contentTr">
+                    <div class="questionnaireId">
+                        <input type="checkbox" :key="index" @click="catchIndex(index)" v-model="quiz.checked">
+                        <td>{{ quiz.questionnaire.id }}</td>
+                    </div>
+                    <div class="questionnaireTitle">
+                        <td @click="goToQuestion">{{ quiz.questionnaire.title }}</td>
+                    </div>
+
                     <td>
-                        <span v-if="quiz.questionnaire.startDate > currentDate">尚未開始</span>
-                        <span v-if="currentDate > quiz.questionnaire.endDate">已結束</span>
-                        <span v-else="quiz.questionnaire.startDate < currentDate && currentDate < quiz.questionnaire.endDate">進行中</span>
+                        <div class="whetherPublished">       
+                            <span v-if="quiz.questionnaire.startDate > currentDate">尚未開始</span>
+                            <span v-if="currentDate > quiz.questionnaire.endDate">已結束</span>
+                            <span v-else="quiz.questionnaire.startDate < currentDate && currentDate < quiz.questionnaire.endDate">進行中</span>
+                        </div>
                     </td>
-                    <td>{{ quiz.questionnaire.startDate }}</td>
-                    <td>{{ quiz.questionnaire.endDate}}</td>
-                    <td>{{ "前往觀看" }}</td>
+                    <div class="questionnaireStartDate">
+                        <td>{{ quiz.questionnaire.startDate }}</td>
+                    </div>
+
+                    <div class="questionnaireEndDate">
+                        <td>{{ quiz.questionnaire.endDate}}</td>
+                    </div>
+
+                    <div class="questionnaireView">
+                        <td>{{ "前往觀看" }}</td>
+                    </div>
+                </div>
                 </tr>
             </table>
+        </div>
         </div>
 
         <div class="page">
@@ -300,7 +319,6 @@
     </div>
         </div>
     </div>
-
     </template>
 
 
@@ -416,21 +434,55 @@
             margin-top:3%;
 
 
-            table{
-
-            tr{
-                width:90vw;
-                display:flex;
-                justify-content:space-around;
-                border:1px solid black;
-
-                td{
-                    cursor:pointer;
+            .tableContent{
+                .headerTr{
+                    display:flex;
+                    border:1px solid black;
+                    width:90vw;
+                    justify-content:space-around;
                     color:blue;
+                }
+
+                .contentTr{
+                    border:3px solid palevioletred;
+                    margin-top:1%;
+                    display:flex;
+                    position:relative;
+
+                    .questionnaireId{
+                        display:flex;
+                        color:blue;
+                        margin-left:6%;
+                    }
+
+                    .questionnaireTitle{
+                    color:blue;
+                    margin-left:9%;
                     
                 }
-            }
 
+                    .whetherPublished{
+                        position:relative;
+                        left:270%;
+                        color:blue;
+                        
+                    }
+
+                    .questionnaireStartDate{
+                        color:blue;
+                        margin-left:22%;
+                    }
+
+                    .questionnaireEndDate{
+                        color:blue;
+                        margin-left:12%;
+                    }
+
+                    .questionnaireView{
+                        color:blue;
+                        margin-left:12%;
+                    }
+                }
             }
         }
 
