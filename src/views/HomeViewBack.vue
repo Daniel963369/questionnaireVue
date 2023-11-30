@@ -8,6 +8,8 @@
                 perpage:10,
                 currentPage:1,
                 searchName:"",
+                searchStartDate:"",
+                searchEndDate:"",
                 currentDate:new Date(),
             }
         },
@@ -86,8 +88,8 @@
                 // 要帶入的值
                 const queryParams = {
                 title:this.searchName,
-                startDate:"",
-                endDate:"",
+                startDate:this.searchStartDate,
+                endDate:this.searchEndDate,
                 };
                 
                 const filteredParams = Object.fromEntries(Object.entries(queryParams).filter(([_, v]) => v !== null && v !== undefined));
@@ -242,8 +244,8 @@
             </div>
             <div class="questionTime">
                 <p>開始 / 結束</p>
-                <input type="date" id="startDate">
-                <input type="date" id="finalDate">
+                <input type="date" id="startDate" v-model="searchStartDate">
+                <input type="date" id="finalDate" v-model="searchEndDate">
                 <button type="button" @click="search">搜尋</button>
             </div>
         </div>
@@ -269,8 +271,8 @@
                     <td @click="goToQuestion">{{ quiz.questionnaire.title }}</td>
                     <td>
                         <span v-if="quiz.questionnaire.startDate > currentDate">尚未開始</span>
-                        <span v-else-if="quiz.questionnaire.startDate < currentDate && currentDate < quiz.questionnaire.endDate">進行中</span>
-                        <span v-else-if="currentDate > quiz.questionnaire.endDate">已結束</span>
+                        <span v-if="currentDate > quiz.questionnaire.endDate">已結束</span>
+                        <span v-else="quiz.questionnaire.startDate < currentDate && currentDate < quiz.questionnaire.endDate">進行中</span>
                     </td>
                     <td>{{ quiz.questionnaire.startDate }}</td>
                     <td>{{ quiz.questionnaire.endDate}}</td>

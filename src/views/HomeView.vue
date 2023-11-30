@@ -32,6 +32,7 @@ export default {
         this.currentDate =[toyear,tomonth,today].join('-')
 
 
+
         // const finalDate = document.getElementById("finalDate")
         // var plusDate =new Date().getDate()
         // const sevenDate =new Date().setDate(plusDate + 7)
@@ -159,9 +160,11 @@ export default {
                 <td>{{ quiz.questionnaire.id }}</td>
                 <td @click="goToQuestion">{{ quiz.questionnaire.title }}</td>
                 <td>
+
                     <span v-if="quiz.questionnaire.startDate > currentDate">尚未開始</span>
-                    <span v-else-if="quiz.questionnaire.startDate < currentDate && currentDate < quiz.questionnaire.endDate">進行中</span>
-                    <span v-else-if="currentDate > quiz.questionnaire.endDate">已結束</span>
+                    <span v-if="currentDate > quiz.questionnaire.endDate">已結束</span>
+                    <span v-else="quiz.questionnaire.startDate < currentDate && currentDate < quiz.questionnaire.endDate">進行中</span>
+
                 </td>
                 <td>{{ quiz.questionnaire.startDate }}</td>
                 <td>{{ quiz.questionnaire.endDate }}</td>
