@@ -1,12 +1,85 @@
 <script>
 export default {
     data(){
-        return{
-            
-        }
+            return{
+                
+                questionnaire:{
+                    title:"",
+                    description:"",
+                    published:"",
+                    startDate:null,
+                    endDate:null,
+                },
 
+                question_list:[
+                    {
+                        quId:0,
+                        qTitle: "",
+                        optionType: "",
+                        necessary:false,
+                        option: ""
+                    }
+                ],
+
+
+                question:[],
+
+                controlPage:0
+            }
+        },
+
+
+            methods:{
+                goToQuestion(){
+                    this.$router.push('/answerPage')
+                },
+
+                goToBack(){
+                    this.$router.push('./HomeViewBack')
+                },
+
+
+                setPage(page){
+                    if(page <= 0 || page > this.totalPage){
+                        return
+                    }
+                    this.currentPage = page
+                },
+
+                fetchData(){
+                    const url = 'http://localhost:8080/api/quiz/search';
+                // 要帶入的值
+                const queryParams = {
+                title:this.searchName,
+                startDate:"",
+                endDate:"",
+                };
+                
+                const filteredParams = Object.fromEntries(Object.entries(queryParams).filter(([_, v]) => v !== null && v !== undefined));
+
+                const queryParamsString = new URLSearchParams(filteredParams).toString();
+
+                // 將查詢字串附加到 URL
+                const urlWithParams = `${url}?${queryParamsString}`;
+
+                fetch(urlWithParams, {
+                method: "GET", 
+                headers: new Headers({
+                    "Content-Type": "application/json",
+                }),
+                })
+                .then((res) => res.json())
+                .catch((error) => console.error("Error:", error))
+                .then((response) => {
+                    this.quizData = response.quizVoList;
+                    console.log(this.quizData);
+
+                
+                });
+                }
+        },
     }
-}
+
 
 
 
@@ -17,8 +90,8 @@ export default {
 </script>
 
 <template>
-    <!-- <div class="checkZone"> -->
-        <!-- <div class="checkTimeZone">
+    <div class="checkZone">
+        <div class="checkTimeZone">
             <div class="checkStartTime">
                 {{ questionnaire.startDate + "~" }}
             </div>
@@ -80,11 +153,82 @@ export default {
         <button type="button" @click="submitQuestionnaire">儲存並發布</button>
     </div>
 
-</div> -->
+</div>
 
 </template>
 
 
 <style lang="scss" scoped>
+.checkZone{
+    width:100%;
+    height:100%;
+    background-color:palegreen;
 
+    .checkTimeZone{
+        display:flex;
+        border:1px solid black;
+
+        .checkStartTime{
+            margin-left:80%;
+        }
+
+
+    }
+
+    .checkTitleZone{
+        text-align:center;
+        margin-top:1%;
+    }
+
+    .checkDespZone{
+        text-align:center;
+        margin-top:3%;
+    }
+
+    .information{
+        width:100vw;
+        text-align:center;
+        margin-top:2%;
+        
+        .name{
+            margin-bottom:1%;
+        }
+        .phoneNumber{
+            margin-right:2%;
+            margin-bottom:1%;
+        }
+
+        .mail{
+            margin-right:0.5%;
+            margin-bottom:1%;
+        }
+    }
+
+    .voteZone{
+            text-align:center;
+            flex-direction:column;
+            margin-top:5%;
+
+
+            .voteTitle{
+                text-align:center;
+            }
+            .voteRadio{
+                width:100vw;
+                display:flex;
+                flex-direction:column;
+            }
+        }
+
+    .reasonZone{
+        text-align:center;
+        margin-top:2%;
+    }
+
+    .checkButtonZone{
+        margin-left:60%;
+        margin-top:3%;
+    }
+
+}
 </style>

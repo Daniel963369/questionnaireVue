@@ -27,6 +27,39 @@ export default{
         }
     },
 
+    mounted(){
+        const startDate = document.getElementById("startDate")
+        const currentDate = new Date()
+        const day = {day:'numeric'}
+        const year = {year:'numeric'}
+        const month = {month:'long'}
+        const today = currentDate.toLocaleString(undefined,day).slice(0,-1)
+        const tomonth = currentDate.toLocaleString(undefined,month).slice(0,-1)
+        const toyear = currentDate.toLocaleString(undefined,year).slice(0,-1)
+        const defaultDate =[toyear,tomonth,today].join('-')
+        startDate.value = defaultDate
+
+        this.currentDate =[toyear,tomonth,today].join('-')
+
+
+
+        // const finalDate = document.getElementById("finalDate")
+        // var plusDate =new Date().getDate()
+        // const sevenDate =new Date().setDate(plusDate + 7)
+        // const sevenDatetime = new Date(sevenDate)
+
+
+
+        // const todayAfterSeven =sevenDatetime.toLocaleString(undefined,day).slice(0,-1)
+        // const tomonthAfterSeven =sevenDatetime.toLocaleString(undefined,month).slice(0,-1)
+        // const toyearAfterSeven =sevenDatetime.toLocaleString(undefined,year).slice(0,-1)
+        // const defaultDateAfterSeven = [toyearAfterSeven,tomonthAfterSeven,todayAfterSeven].join('-')
+        // console.log(defaultDateAfterSeven)
+        // finalDate.value = defaultDateAfterSeven
+        // console.log(finalDate.value)
+        this.fetchData();
+    },
+
 
 
 
