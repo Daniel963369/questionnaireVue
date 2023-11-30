@@ -116,6 +116,7 @@ export default {
             .catch((error) => console.error("Error:", error))
             .then((response) => {
                 this.quizData = response.quizVoList;
+                console.log(response)
                 console.log(this.quizData);
                 this.quizData.forEach((quiz) => {
                     this.qnId = quiz.questionnaire.id;
@@ -124,14 +125,14 @@ export default {
                     this.startDate = quiz.questionnaire.startDate;
                     this.endDate = quiz.questionnaire.endDate;
 
-                    console.log(this.startDate)
-                    console.log(this.endDate)
-                    console.log(this.currentDate)
                 });
             
             });
             }
-        }
+    },
+    updated(){
+        console.log(this.quizData)
+    }
 
 }
 </script>

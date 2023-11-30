@@ -36,6 +36,9 @@ export default{
             const newQuId = this.question.length + 1
             this.question.push({quId:newQuId,qTitle:this.question_list.qTitle,optionType:this.question_list.optionType
             ,isNecessary:this.question_list.necessary, option:this.question_list.option})
+
+            console.log(this.question)
+            console.log(this.questionnaire)
         },
 
         goToAddPageQu(){
@@ -214,7 +217,10 @@ export default{
                     <td>{{ qu.quId }}</td>
                     <td>{{ qu.qTitle }}</td>
                     <td>{{ qu.optionType }}</td>
-                    <td>{{ qu.necessary }}</td>
+                    <td>
+                        <span v-if="qu.isNecessary">是</span>
+                        <span v-else>否</span>
+                    </td>
                     <td>{{"編輯"}}</td>
                 </tr>
             </table>
@@ -266,14 +272,18 @@ export default{
     </div>
 
     <div class="voteZone">
-        <div class="voteTitle">
-            <p>請投給以下一位</p>
-        </div>
+        <div v-for="(voteQuestion,index) in question" :key="index">
+            <div class="voteTitle">
+                <p>{{ voteQuestion.qTitle }}</p>
+                <p>請投給下列選項:</p>
+            </div>
+
             <div class="voteRadio">
-                <div v-for="(qoption,index) in question_list.option" :key="index">
-                    <input type="radio" :value="qoption">
-                    <label>{{ qoption }}</label>
+                <div v-for="(qoption,index) in voteQuestion.option.split(';')" :key="index">
+                <input type="radio" value="qoption">
+                <label>{{ qoption }}</label>
                 </div>
+            </div>
         </div>
     </div>
 
@@ -502,9 +512,7 @@ export default{
             margin-left:80%;
         }
 
-        .checkEndTime{
-            
-        }
+
     }
 
     .checkTitleZone{
