@@ -324,8 +324,8 @@
 
     <style lang="scss" scoped>
     .body{
-        width:100vw;
-        height:100vh;
+        width:100%;
+        height:100%;
         background-color:palegreen;
     .header{
         width:100vw;

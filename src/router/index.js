@@ -29,9 +29,18 @@ const router = createRouter({
     },
 
     {
-      path: '/HomeView',
+      path: '/HomeView/',
       name: 'HomeView',
       component: () =>import('../views/HomeView.vue')
+      
+      
+    },
+
+    {
+      path: '/answer/:questionnaireId',
+      name: 'Answer',
+      component: () => import('../views/Answer.vue'),
+      props:true
     },
 
     {

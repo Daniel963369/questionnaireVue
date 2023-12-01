@@ -42,6 +42,8 @@ export default {
         startDate.value = defaultDate
 
         this.currentDate =[toyear,tomonth,today].join('-')
+        console.log(typeof(currentDate))
+        
 
 
 
@@ -91,10 +93,19 @@ export default {
                     this.fetchData({title:this.searchName,startDate: this.startDate, endDate: this.endDate})
             },
 
-            goToQuestion(){
-                
+            goToQuestion(questionnaireId){
+                this.$router.push({name:'Answer',params:{questionnaireId}});
                 this.page = 1
             },
+
+            goToQuestion2(){
+                const questionJSON = JSON.stringify(this.question);
+                this.$router.push({
+                    name:'Answer',
+                    query: { question: questionJSON } 
+                })
+            },
+
 
             goToBack(){
                 this.$router.push('./HomeViewBack')
@@ -189,16 +200,16 @@ export default {
                     <td>{{ quiz.questionnaire.id }}</td>
                 </div>
                 <div class="questionnaireTitle">
-                    <td @click="goToQuestion">{{ quiz.questionnaire.title }}</td>
+                    <td @click="goToQuestion(JSON.stringify(quiz.questionnaire)),goToQuestion2">{{ quiz.questionnaire.title }}</td>
                 </div>
         
 
 
                 <td>
                     <div class="whetherPublished">
-                        <td v-if="quiz.questionnaire.startDate > currentDate">尚未開始</td>
-                        <td v-if="currentDate > quiz.questionnaire.endDate">已結束</td>
-                        <td v-else="quiz.questionnaire.startDate < currentDate && currentDate < quiz.questionnaire.endDate">進行中</td>
+                        <span v-if="quiz.questionnaire.startDate < currentDate && currentDate < quiz.questionnaire.endDate">進行中</span>
+                        <span v-if="currentDate > quiz.questionnaire.endDate">已結束</span>
+                        <span v-if="quiz.questionnaire.startDate > currentDate">尚未開始</span>
                     </div>
                 </td>
                 <div class="questionnaireStartDate">
@@ -239,22 +250,7 @@ export default {
 </div>
 
 <div class="answerZone" v-if="page == 1">
-    <div class="checkZone">
-        <div class="checkTimeZone">
-            <div class="checkStartTime">
-                {{ quizData[0].questionnaire.startDate + "~" }}
-            </div>
-            <div class="checkEndTime">
-                {{ quizData[0].questionnaire.endDate }}
-            </div>
-        </div>
-        <div class="checkTitleZone">
-            <p>{{ quizData[0].questionnaire.title }}</p>
-        </div>
 
-        <div class="checkDespZone">
-            <p>{{ quizData[0].questionnaire.description }}</p>
-        </div>
 
         <div class="information">
                 <div class="name">
@@ -276,22 +272,7 @@ export default {
                 </div>
         </div>
 
-        <div class="voteZone">
-            <div v-for="(voteQuestion,index) in question" :key="index">
-            <div class="voteTitle">
-                <p>{{ voteQuestion.qTitle }}</p>
-                <p>請投給下列選項:</p>
-            </div>
-
-            <div class="voteRadio">
-                <div v-for="(qoption,index) in voteQuestion.option" :key="index">
-                <input type="radio" value="qoption">
-                <label>{{ qoption }}</label>
-                </div>
-            </div>
-        </div>
-            
-        </div>
+  
 
         <div class="reasonZone">
             <p>請說明理由</p>
@@ -303,63 +284,30 @@ export default {
         <button type="button" @click="goToCheckPage">送出</button>
     </div>
 
-    </div>
+    
 
 </div>
 
 <div class="checkAnswerZone" v-if="page == 2">
-    <div class="checkZone1">
-        <div class="checkTimeZone1">
-            <div class="checkStartTime1">
-                {{ quizData[0].questionnaire.startDate + "~" }}
-            </div>
-            <div class="checkEndTime1">
-                {{ quizData[0].questionnaire.endDate }}
-            </div>
-        </div>
-        <div class="checkTitleZone1">
-            <p>{{ quizData[0].questionnaire.title }}</p>
-        </div>
-
-        <div class="checkDespZone1">
-            <p>{{ quizData[0].questionnaire.description }}</p>
-        </div>
 
         <div class="information1">
                 <div class="name1">
                     <label for="">姓名</label>
-                    {{personInformation.name}}
+                <p>{{personInformation.name}}</p>
                 </div>
                 <div class="phoneNumber1">
                     <label for="">電話號碼</label>
-                     {{personInformation.phoneNumber}}
+                    <p>{{personInformation.phoneNumber}}</p>
                 </div>
 
                 <div class="mail1">
                     <label for="">Email</label>
-                     {{personInformation.email}}
+                    <p><p>{{personInformation.email}}</p></p>
                 </div>
                 <div class="age1">
                     <label for="">年齡</label>
-                    {{personInformation.age}}
+                    <p>{{personInformation.age}}</p>
                 </div>
-        </div>
-
-        <div class="voteZone1">
-            <div v-for="(voteQuestion,index) in question" :key="index">
-            <div class="voteTitle1">
-                <p>{{ voteQuestion.qTitle }}</p>
-                <p>請投給下列選項:</p>
-            </div>
-
-            <div class="voteRadio1">
-                <div v-for="(qoption,index) in voteQuestion.option" :key="index">
-                <input type="radio" value="qoption">
-                <label>{{ qoption }}</label>
-                </div>
-            </div>
-        </div>
-            
         </div>
 
         <div class="reasonZone1">
@@ -367,12 +315,15 @@ export default {
             <input type="text">
         </div>
 
+
+
+
     <div class="checkButtonZone">
 
-        <button type="button" @click="goToHomePage">確認並送出</button>
+        <button type="button" @click="goToCheckPage">送出</button>
     </div>
 
-    </div>
+    
 </div>
 
 
@@ -383,8 +334,8 @@ export default {
 
 <style lang="scss" scoped>
 .body{
-    width:100vw;
-    height:100vh;
+    width:100%;
+    height:100%;
     background-color:palegreen;
 .header{
     width:100vw;
