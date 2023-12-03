@@ -37,7 +37,7 @@ const router = createRouter({
     },
 
     {
-      path: '/answer/:questionnaireId',
+      path: '/answer/:questionnaireContent',
       name: 'Answer',
       component: () => import('../views/Answer.vue'),
       props:true

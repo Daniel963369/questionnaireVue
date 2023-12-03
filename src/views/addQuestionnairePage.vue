@@ -1,4 +1,5 @@
 <script>
+import deleteConfirmation from './deleteConfirmation.vue'
 export default{
     data(){
         return{
@@ -19,13 +20,16 @@ export default{
                     option: ""
                 }
             ],
-
+            showDeleteConfirmation:false,
 
             question:[],
 
             controlPage:0
         }
     },
+    components:{
+            deleteConfirmation
+        },
 
     mounted(){
         const startDate = document.getElementById("startDate")
@@ -40,6 +44,7 @@ export default{
         startDate.value = defaultDate
 
         this.currentDate =[toyear,tomonth,today].join('-')
+        this.currentDate =currentDate
 
 
 
@@ -64,6 +69,26 @@ export default{
 
     methods:{
 
+        showConfirmation(){
+            this.showDeleteConfirmation = true
+                },
+
+        cancelDelete(){
+            this.showDeleteConfirmation = false
+                },
+                
+        confirmDelete(){
+            this.showDeleteConfirmation = false
+                },
+        
+        backToQnPage(){
+            this.controlPage = 0
+        },
+
+        backToQuPage(){
+            this.controlPage = 1
+        },
+
         transmitQu(){
             const newQuId = this.question.length + 1
             this.question.push({quId:newQuId,qTitle:this.question_list.qTitle,optionType:this.question_list.optionType
@@ -79,6 +104,11 @@ export default{
 
         goToCheckPage(){
             this.controlPage = 2
+        },
+
+        deleteQuestion(index){
+            this.question.splice(index, 1);
+            this.showDeleteConfirmation = false
         },
 
         submitQuestionnaire() {
@@ -206,8 +236,8 @@ export default{
 
     
     <div class="qutitle">
-        <p>問卷</p>
-        <p>題目</p> 
+        <p @click="backToQnPage">問卷</p>
+        <p @click="backToQuPage">題目</p> 
         <p>問卷回饋</p>
         <p>統計</p>
     </div>
@@ -233,7 +263,8 @@ export default{
         <button type="button" @click="transmitQu">加入</button>
     </div>
 
-    <i class="fa-solid fa-trash"></i>
+    <i class="fa-solid fa-trash" @click="showConfirmation"></i>
+    <deleteConfirmation :show="showDeleteConfirmation" @cancel="cancelDelete" @confirm="deleteQuestion"/>
 
     <div class="deletequZone">
         <div class="deleteheader">
@@ -246,7 +277,10 @@ export default{
                     <td>編輯</td>
                 </tr>
                 <tr v-for="(qu,index) in question" :key="index">
-                    <td>{{ qu.quId }}</td>
+                    <div class="idZone">
+                        <input type="checkbox">
+                        <td>{{ qu.quId }}</td>
+                    </div>
                     <td>{{ qu.qTitle }}</td>
                     <td>{{ qu.optionType }}</td>
                     <td>
@@ -260,7 +294,7 @@ export default{
     </div>
 
     <div class="quButtonZone">
-        <button type="button">上一步</button>
+        <button type="button" @click="backToQnPage">上一步</button>
         <button type="button" @click="goToCheckPage">送出</button>
     </div>
 
@@ -325,7 +359,7 @@ export default{
     </div>
 
     <div class="checkButtonZone">
-
+        <button type="button" @click="backToQuPage">取消並返回上一頁</button>
         <button type="button" @click="submitQuestionnaire">儲存並發布</button>
     </div>
 
@@ -342,6 +376,16 @@ export default{
     height:100vh;
     background-color:palegreen;
     position: relative;
+
+    &.show-deleteConfirmation {
+        background-color: rgba(0, 0, 0, 0.5); // 遮罩层颜色和透明度
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 100; // 保证在最上层
+    }
 
     .header{
     width:100vw;
@@ -518,12 +562,28 @@ export default{
     .deletequZone{
         
         .deleteheader{
+            border:1px solid black;
             display:flex;
             margin-top:2%;
             justify-content:space-around;
             background-color:palegreen;
             width:60%;
             margin:0 20%;
+
+
+            table{
+                width:100%;
+                tr{
+                    width:100%;
+                    border:1px solid black;
+                    display:flex;
+                    justify-content:space-around;
+                }
+            }
+
+            .idZone{
+                display: flex;
+            }
         }
     }
 

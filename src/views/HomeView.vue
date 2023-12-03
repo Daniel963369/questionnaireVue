@@ -2,11 +2,6 @@
 export default {
     data(){
         return{
-            qnId:"",
-            qTitle:"",
-            published:"",
-            startDate:"",
-            endDate:"",
             key:0,
             quizData:[],
             perpage:10,
@@ -17,15 +12,6 @@ export default {
             searchEndDate:"",
             page:0,
             question:[],
-
-            personInformation:{
-                name:"",
-                phoneNumber:"",
-                email:"",
-                age:"",
-                radioValue:"",
-            },
-            
         }
     },
 
@@ -40,9 +26,11 @@ export default {
         const toyear = currentDate.toLocaleString(undefined,year).slice(0,-1)
         const defaultDate =[toyear,tomonth,today].join('-')
         startDate.value = defaultDate
-
         this.currentDate =[toyear,tomonth,today].join('-')
-        console.log(typeof(currentDate))
+        this.currentDate =currentDate
+        
+
+
         
 
 
@@ -62,6 +50,7 @@ export default {
         // finalDate.value = defaultDateAfterSeven
         // console.log(finalDate.value)
         this.fetchData();
+        console.log(typeof(this.currentDate))
     },
 
     computed:{
@@ -82,6 +71,10 @@ export default {
 
     methods:{
 
+            goToBack(){
+                this.$router.push('./HomeViewBack')
+            },
+
             goToHomePage(){
                 this.page = 0
             },
@@ -93,22 +86,40 @@ export default {
                     this.fetchData({title:this.searchName,startDate: this.startDate, endDate: this.endDate})
             },
 
-            goToQuestion(questionnaireId){
-                this.$router.push({name:'Answer',params:{questionnaireId}});
-                this.page = 1
-            },
+            // goToQuestion(quiz){
+            //     this.$router.push({name:'Answer',params:{questionnaireContent:JSON.stringify({
+            //         questionnaire:quiz.questionnaire,
+            //         question:quiz.question
+            //     })}});
+            // },
 
-            goToQuestion2(){
-                const questionJSON = JSON.stringify(this.question);
+
+            // goToBack(){
+            //     this.$router.push('./HomeViewBack')
+            // },
+
+        //     goToQuestion(quiz) {
+        // // 创建新的对象，只包含需要的属性
+        //     const serializedQuiz = {
+        //         questionnaire: quiz.questionnaire,
+        //         question: quiz.question
+        //     };
+
+        //     this.$router.push({
+        //         name: 'Answer',
+        //         params: {
+        //             questionnaireContent: JSON.stringify(serializedQuiz)
+        //         }
+        //     });
+        // },
+
+            goToQuestion(quiz) {
                 this.$router.push({
-                    name:'Answer',
-                    query: { question: questionJSON } 
-                })
-            },
-
-
-            goToBack(){
-                this.$router.push('./HomeViewBack')
+                    name: 'Answer',
+                    params: {
+                        questionnaireContent: JSON.stringify(quiz)
+                    }
+                });
             },
 
 
@@ -146,12 +157,11 @@ export default {
             .then((response) => {
                 this.quizData = response.quizVoList;
                 console.log(this.quizData);
-                const newQuId = this.question.length + 1
-                this.question.push({qnId:newQuId,qTitle:this.quizData[0].question_list.qTitle,optionType:this.quizData[0].question_list.optionType,
-                    isNecessary:this.quizData[0].necessary, option:this.quizData[0].option})
+                // const newQuId = this.question.length + 1
+                // this.question.push({qnId:newQuId,qTitle:this.quizData[0].question_list.qTitle,optionType:this.quizData[0].question_list.optionType,
+                //     isNecessary:this.quizData[0].necessary, option:this.quizData[0].option})
 
-                    console.log(this.question)
-
+                    
 
             
             });
@@ -200,16 +210,18 @@ export default {
                     <td>{{ quiz.questionnaire.id }}</td>
                 </div>
                 <div class="questionnaireTitle">
-                    <td @click="goToQuestion(JSON.stringify(quiz.questionnaire)),goToQuestion2">{{ quiz.questionnaire.title }}</td>
+                    <td @click="goToQuestion(quiz)">{{ quiz.questionnaire.title }}</td>
                 </div>
         
 
 
                 <td>
                     <div class="whetherPublished">
-                        <span v-if="quiz.questionnaire.startDate < currentDate && currentDate < quiz.questionnaire.endDate">進行中</span>
-                        <span v-if="currentDate > quiz.questionnaire.endDate">已結束</span>
-                        <span v-if="quiz.questionnaire.startDate > currentDate">尚未開始</span>
+                        <span v-if="quiz.questionnaire.published && quiz.questionnaire.endDate < currentDate">已截止</span>
+                        <span v-if="!quiz.questionnaire.published">未發布</span>
+                        <span v-else>進行中</span>
+                        
+                        
                     </div>
                 </td>
                 <div class="questionnaireStartDate">
@@ -248,86 +260,6 @@ export default {
 </div>
     </div>
 </div>
-
-<div class="answerZone" v-if="page == 1">
-
-
-        <div class="information">
-                <div class="name">
-                    <label for="">姓名</label>
-                    <input type="text" placeholder="請填寫姓名" v-model="personInformation.name">
-                </div>
-                <div class="phoneNumber">
-                    <label for="">電話號碼</label>
-                    <input type="text" placeholder="請填寫電話" v-model="personInformation.phoneNumber">
-                </div>
-
-                <div class="mail">
-                    <label for="">Email</label>
-                    <input type="text" placeholder="請填寫E-mail"  v-model="personInformation.email">
-                </div>
-                <div class="age">
-                    <label for="">年齡</label>
-                    <input type="text" placeholder="請填寫年齡" v-model="personInformation.age">
-                </div>
-        </div>
-
-  
-
-        <div class="reasonZone">
-            <p>請說明理由</p>
-            <input type="text">
-        </div>
-
-    <div class="checkButtonZone">
-
-        <button type="button" @click="goToCheckPage">送出</button>
-    </div>
-
-    
-
-</div>
-
-<div class="checkAnswerZone" v-if="page == 2">
-
-        <div class="information1">
-                <div class="name1">
-                    <label for="">姓名</label>
-                <p>{{personInformation.name}}</p>
-                </div>
-                <div class="phoneNumber1">
-                    <label for="">電話號碼</label>
-                    <p>{{personInformation.phoneNumber}}</p>
-                </div>
-
-                <div class="mail1">
-                    <label for="">Email</label>
-                    <p><p>{{personInformation.email}}</p></p>
-                </div>
-                <div class="age1">
-                    <label for="">年齡</label>
-                    <p>{{personInformation.age}}</p>
-                </div>
-        </div>
-
-        <div class="reasonZone1">
-            <p>請說明理由</p>
-            <input type="text">
-        </div>
-
-
-
-
-    <div class="checkButtonZone">
-
-        <button type="button" @click="goToCheckPage">送出</button>
-    </div>
-
-    
-</div>
-
-
-
 
 </template>
 
@@ -512,151 +444,7 @@ export default {
 }
 
 
-.checkZone{
-    width:100%;
-    height:100%;
-    background-color:palegreen;
-
-    .checkTimeZone{
-        display:flex;
-        border:1px solid black;
-
-        .checkStartTime{
-            margin-left:80%;
-        }
 
 
-    }
 
-    .checkTitleZone{
-        text-align:center;
-        margin-top:1%;
-    }
-
-    .checkDespZone{
-        text-align:center;
-        margin-top:3%;
-    }
-
-    .information{
-        width:100vw;
-        text-align:center;
-        margin-top:2%;
-        
-        .name{
-            margin-bottom:1%;
-        }
-        .phoneNumber{
-            margin-right:2%;
-            margin-bottom:1%;
-        }
-
-        .mail{
-            margin-right:0.5%;
-            margin-bottom:1%;
-        }
-    }
-
-    .voteZone{
-            text-align:center;
-            flex-direction:column;
-            margin-top:5%;
-
-
-            .voteTitle{
-                text-align:center;
-            }
-            .voteRadio{
-                width:100vw;
-                display:flex;
-                flex-direction:column;
-            }
-        }
-
-    .reasonZone{
-        text-align:center;
-        margin-top:2%;
-    }
-
-    .checkButtonZone{
-        margin-left:60%;
-        margin-top:3%;
-    }
-
-}
-
-.checkAnswerZone{
-        .checkZone1{
-        width:100%;
-        height:100%;
-        background-color:palegreen;
-
-        .checkTimeZone1{
-            display:flex;
-            border:1px solid black;
-
-            .checkStartTime1{
-                margin-left:80%;
-            }
-
-
-        }
-
-        .checkTitleZone1{
-            text-align:center;
-            margin-top:1%;
-        }
-
-        .checkDespZone1{
-            text-align:center;
-            margin-top:3%;
-        }
-
-        .information1{
-            width:100vw;
-            text-align:center;
-            margin-top:2%;
-            
-            .name{
-                margin-bottom:1%;
-            }
-            .phoneNumber{
-                margin-right:2%;
-                margin-bottom:1%;
-            }
-
-            .mail{
-                margin-right:0.5%;
-                margin-bottom:1%;
-            }
-        }
-
-        .voteZone1{
-                text-align:center;
-                flex-direction:column;
-                margin-top:5%;
-
-
-                .voteTitle{
-                    text-align:center;
-                }
-                .voteRadio{
-                    width:100vw;
-                    display:flex;
-                    flex-direction:column;
-                }
-            }
-
-        .reasonZone1{
-            text-align:center;
-            margin-top:2%;
-        }
-
-        .checkButtonZone{
-            margin-left:60%;
-            margin-top:3%;
-        }
-    }
-
-}
 </style>

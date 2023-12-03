@@ -7,8 +7,8 @@
 export default {
 
     props: {
-        questionnaireId: {
-            type:Object,
+        questionnaireContent: {
+            type:String,
             required: true,
     },
   },
@@ -17,6 +17,15 @@ export default {
             questionnaireData:[],
             answerQuestion:{},
             question:[],
+            page:0,
+
+            personInformation:{
+                name:"",
+                phoneNumber:"",
+                email:"",
+                age:"",
+                radioValue:"",
+            },
             
         }
     },
@@ -24,24 +33,32 @@ export default {
 
     mounted() {
 
-        const serializedObject = JSON.parse(this.questionnaireId)
-        this.questionnaireData = serializedObject
-        console.log(this.questionnaireData)
 
-        
-        const questionJSON = this.$route.query.question;
-        if (questionJSON) {
-        // 將 JSON 字串轉換回陣列
-        this.question = JSON.parse(questionJSON);
-        
-        // 現在你可以在這裡使用 this.question
-        console.log(this.question);
-    }
-    this.answerQuestion = this.question
+
+        // this.questionnaireData = JSON.parse(this.questionnaireContent);
+        // console.log(this.questionnaireData);
+
+
+    // 直接解析传递过来的 JSON 字符串
+    const serializedObject = JSON.parse(this.questionnaireContent);
+    this.questionnaireData = serializedObject.questionnaire;
+    this.question = serializedObject.question || [];
+    console.log(this.questionnaireData);
+    console.log(this.question);
+
+
 
 
     },
     methods: {
+
+        goToCheckPage(){
+            this.page = 1
+        },
+
+        goToHomePage(){
+            this.$router.push('/HomeView')
+        }
     },
 };
 </script>
@@ -49,13 +66,168 @@ export default {
 
 
 <template>
+    <div class="answerZone" v-if="page == 0">
 
-<p>{{ questionnaireData }}</p>
-<p>{{ answerQuestion }}</p>
+        <div class="information">
+                <div class="name">
+                    <label for="">姓名</label>
+                    <input type="text" placeholder="請填寫姓名" v-model="personInformation.name">
+                </div>
+                <div class="phoneNumber">
+                    <label for="">電話號碼</label>
+                    <input type="text" placeholder="請填寫電話" v-model="personInformation.phoneNumber">
+                </div>
+
+                <div class="mail">
+                    <label for="">Email</label>
+                    <input type="text" placeholder="請填寫E-mail"  v-model="personInformation.email">
+                </div>
+                <div class="age">
+                    <label for="">年齡</label>
+                    <input type="text" placeholder="請填寫年齡" v-model="personInformation.age">
+                </div>
+        </div>
+
+
+
+        <div class="reasonZone">
+            <p>請說明理由</p>
+            <input type="text">
+        </div>
+
+        <div class="checkButtonZone">
+
+        <button type="button" @click="goToCheckPage">送出</button>
+        </div>
+</div>
+
+
+<div class="checkAnswerZone" v-if="page == 1">
+
+        <div class="information1">
+                <div class="name1">
+                    <label for="">姓名</label>
+                <p>{{personInformation.name}}</p>
+                </div>
+                <div class="phoneNumber1">
+                    <label for="">電話號碼</label>
+                    <p>{{personInformation.phoneNumber}}</p>
+                </div>
+
+                <div class="mail1">
+                    <label for="">Email</label>
+                    <p><p>{{personInformation.email}}</p></p>
+                </div>
+                <div class="age1">
+                    <label for="">年齡</label>
+                    <p>{{personInformation.age}}</p>
+                </div>
+        </div>
+
+        <div class="reasonZone1">
+            <p>請說明理由</p>
+            <input type="text">
+        </div>
+
+
+
+
+        <div class="checkButtonZone">
+
+        <button type="button" @click="goToHomePage">送出</button>
+        </div>
+
+
+</div>
 
 </template>
 
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.answerZone{
+    width:100%;
+    height:100%;
+    background-color:palegreen;
+
+
+
+
+
+    .information{
+        width:100vw;
+        text-align:center;
+        margin-top:2%;
+        
+        .name{
+            margin-bottom:1%;
+        }
+        .phoneNumber{
+            margin-right:2%;
+            margin-bottom:1%;
+        }
+
+        .mail{
+            margin-right:0.5%;
+            margin-bottom:1%;
+        }
+    }
+
+
+
+    .reasonZone{
+        text-align:center;
+        margin-top:2%;
+    }
+
+    .checkButtonZone{
+        margin-left:60%;
+        margin-top:3%;
+    }
+
+}
+
+.checkAnswerZone{
+    width:100%;
+    height:100%;
+    background-color:palegreen;
+
+
+
+        .information1{
+            width:100vw;
+            text-align:center;
+            margin-top:2%;
+            
+            .name{
+                margin-bottom:1%;
+            }
+            .phoneNumber{
+                margin-right:2%;
+                margin-bottom:1%;
+            }
+
+            .mail{
+                margin-right:0.5%;
+                margin-bottom:1%;
+            }
+        }
+
+        .reasonZone1{
+            text-align:center;
+            margin-top:2%;
+        }
+
+        .checkButtonZone{
+            margin-left:60%;
+            margin-top:3%;
+        }
+    }
+
+
+
+
+
+
+</style>
 
 

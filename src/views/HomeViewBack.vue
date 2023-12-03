@@ -1,4 +1,5 @@
     <script>
+    import deleteConfirmation from './deleteConfirmation.vue'
     export default {
         data(){
             return{
@@ -11,13 +12,16 @@
                 searchStartDate:"",
                 searchEndDate:"",
                 currentDate:new Date(),
+                showDeleteConfirmation:false
             }
         },
         created(){
 
         },
+        components:{
+            deleteConfirmation
+        },
         mounted(){
-            const startDate = document.getElementById("startDate")
             const currentDate = new Date()
             const day = {day:'numeric'}
             const year = {year:'numeric'}
@@ -29,20 +33,6 @@
             startDate.value = defaultDate
             this.currentDate =[toyear,tomonth,today].join('-')
 
-            // const finalDate = document.getElementById("finalDate")
-            // var plusDate =new Date().getDate()
-            // const sevenDate =new Date().setDate(plusDate + 7)
-            // const sevenDatetime = new Date(sevenDate)
-
-
-
-            // const todayAfterSeven =sevenDatetime.toLocaleString(undefined,day).slice(0,-1)
-            // const tomonthAfterSeven =sevenDatetime.toLocaleString(undefined,month).slice(0,-1)
-            // const toyearAfterSeven =sevenDatetime.toLocaleString(undefined,year).slice(0,-1)
-            // const defaultDateAfterSeven = [toyearAfterSeven,tomonthAfterSeven,todayAfterSeven].join('-')
-            // console.log(defaultDateAfterSeven)
-            // finalDate.value = defaultDateAfterSeven
-            // console.log(finalDate.value)
             this.fetchData();
         },
         
@@ -62,6 +52,19 @@
         },
 
         methods:{
+                
+                showConfirmation(){
+                    this.showDeleteConfirmation = true
+                },
+
+                cancelDelete(){
+                    this.showDeleteConfirmation = false
+                },
+                
+                confirmDelete(){
+                    this.showDeleteConfirmation = false
+                },
+
 
                 goToAddPage(){
                     this.$router.push('/addPage')
@@ -109,6 +112,7 @@
                 .catch((error) => console.error("Error:", error))
                 .then((response) => {
                     this.quizData = response.quizVoList;
+                    
                 });
                 },
 
@@ -203,6 +207,7 @@
                             console.log(this.quizData)
                             console.log(this.quizData[i].questionnaire.id)
                             this.quizData.splice(i,1)
+                            this.showDeleteConfirmation =false
                             
                         }
                     }
@@ -251,7 +256,8 @@
         </div>
 
         <div class="iconZone">
-            <i class="fa-solid fa-trash" @click="deleteQn"></i>
+            <i class="fa-solid fa-trash" @click="showConfirmation"></i>
+            <deleteConfirmation :show="showDeleteConfirmation" @cancel="cancelDelete" @confirm="deleteQn" /> 
             <i class="fa-solid fa-plus" @click="goToAddPage"></i>
         </div>
 
@@ -273,14 +279,14 @@
                         <td>{{ quiz.questionnaire.id }}</td>
                     </div>
                     <div class="questionnaireTitle">
-                        <td @click="goToQuestion">{{ quiz.questionnaire.title }}</td>
+                        <td>{{ quiz.questionnaire.title }}</td>
                     </div>
 
                     <td>
                         <div class="whetherPublished">       
-                            <span v-if="quiz.questionnaire.startDate > currentDate">尚未開始</span>
-                            <span v-if="currentDate > quiz.questionnaire.endDate">已結束</span>
-                            <span v-else="quiz.questionnaire.startDate < currentDate && currentDate < quiz.questionnaire.endDate">進行中</span>
+                            <span v-if="quiz.questionnaire.published && quiz.questionnaire.endDate > currentDate">已截止</span>
+                            <span v-else-if="!quiz.questionnaire.published">未發布</span>
+                            <span v-else>進行中</span>
                         </div>
                     </td>
                     <div class="questionnaireStartDate">
