@@ -155,7 +155,7 @@ export default {
             .then((res) => res.json())
             .catch((error) => console.error("Error:", error))
             .then((response) => {
-                this.quizData = response.quizVoList;
+                this.quizData = response.quizVoList.filter(quiz => quiz.questionnaire.published);
                 console.log(this.quizData);
                 // const newQuId = this.question.length + 1
                 // this.question.push({qnId:newQuId,qTitle:this.quizData[0].question_list.qTitle,optionType:this.quizData[0].question_list.optionType,

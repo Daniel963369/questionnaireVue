@@ -67,6 +67,14 @@ export default {
 
 <template>
     <div class="answerZone" v-if="page == 0">
+        <div class="questionnaireData">
+            <div class="questionnaireTime">
+                <p>{{ questionnaireData.startDate + "~" }}</p>
+                <p>{{ questionnaireData.endDate}}</p>
+            </div>
+            <p>{{ questionnaireData.title }}</p>
+            <p>{{ questionnaireData.description }}</p>
+        </div>
 
         <div class="information">
                 <div class="name">
@@ -103,6 +111,15 @@ export default {
 
 
 <div class="checkAnswerZone" v-if="page == 1">
+
+        <div class="questionnaireData1">
+            <div class="questionnaireTime1">
+                <p>{{ questionnaireData.startDate + "~" }}</p>
+                <p>{{ questionnaireData.endDate}}</p>
+            </div>
+            <p>{{ questionnaireData.title }}</p>
+            <p>{{ questionnaireData.description }}</p>
+        </div>
 
         <div class="information1">
                 <div class="name1">
@@ -149,6 +166,21 @@ export default {
     height:100%;
     background-color:palegreen;
 
+    .questionnaireData{
+        width:100%;
+
+
+        .questionnaireTime{
+            display:flex;
+            width:100%;
+            margin-left:80%;
+        }
+
+        p{
+            text-align:center;
+        }
+    }
+
 
 
 
@@ -190,6 +222,21 @@ export default {
     width:100%;
     height:100%;
     background-color:palegreen;
+
+        .questionnaireData1{
+            width:100%;
+
+
+        .questionnaireTime1{
+            display:flex;
+            width:100%;
+            margin-left:80%;
+        }
+
+        p{
+            text-align:center;
+        }
+    }
 
 
 
