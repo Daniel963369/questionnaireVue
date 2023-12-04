@@ -42,9 +42,10 @@ export default {
     // 直接解析传递过来的 JSON 字符串
     const serializedObject = JSON.parse(this.questionnaireContent);
     this.questionnaireData = serializedObject.questionnaire;
-    this.question = serializedObject.question || [];
+    this.question = serializedObject.question_list || [];
     console.log(this.questionnaireData);
     console.log(this.question);
+    
 
 
 
@@ -103,6 +104,22 @@ export default {
             <input type="text">
         </div>
 
+        <div class="voteZone">
+        <div v-for="(voteQuestion,index) in question" :key="index">
+            <div class="voteTitle">
+                <p>{{ voteQuestion.qTitle }}</p>
+                <p>請投給下列選項:</p>
+            </div>
+
+            <div class="voteRadio">
+                <div v-for="(qoption,index) in voteQuestion.option.split(';')" :key="index">
+                <input type="radio" value="qoption">
+                <label>{{ qoption }}</label>
+                </div>
+            </div>
+        </div>
+    </div>
+
         <div class="checkButtonZone">
 
         <button type="button" @click="goToCheckPage">送出</button>
@@ -146,7 +163,18 @@ export default {
             <input type="text">
         </div>
 
+        <div class="voteZone1">
+        <div v-for="(voteQuestion,index) in question" :key="index">
+            <div class="voteTitle1">
+                <p>{{ voteQuestion.qTitle }}</p>
+                <p>請投給下列選項:</p>
+                {{ voteQuestion.option }}
+            </div>
 
+            <div class="voteRadio1">
+            </div>
+        </div>
+    </div>
 
 
         <div class="checkButtonZone">
@@ -181,6 +209,21 @@ export default {
         }
     }
 
+        .voteZone{
+            text-align:center;
+            flex-direction:column;
+            margin-top:5%;
+
+
+            .voteTitle{
+                text-align:center;
+            }
+            .voteRadio{
+                width:100vw;
+                display:flex;
+                flex-direction:column;
+            }
+        }
 
 
 
@@ -262,6 +305,23 @@ export default {
         .reasonZone1{
             text-align:center;
             margin-top:2%;
+        }
+
+        
+        .voteZone1{
+            text-align:center;
+            flex-direction:column;
+            margin-top:5%;
+
+
+            .voteTitle1{
+                text-align:center;
+            }
+            .voteRadio1{
+                width:100vw;
+                display:flex;
+                flex-direction:column;
+            }
         }
 
         .checkButtonZone{

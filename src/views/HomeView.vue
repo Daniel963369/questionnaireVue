@@ -382,6 +382,7 @@ export default {
                 position:relative;
 
                 .questionnaireId{
+                    text-align:center;
                     color:blue;
                     margin-left:6%;
                 }

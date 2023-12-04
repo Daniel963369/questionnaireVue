@@ -52,6 +52,8 @@
         },
 
         methods:{
+
+                
                 
                 showConfirmation(){
                     this.showDeleteConfirmation = true
