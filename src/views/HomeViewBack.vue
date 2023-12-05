@@ -1,8 +1,14 @@
     <script>
-    import deleteConfirmation from './deleteConfirmation.vue'
+    import AddQuestionnairePage from './addQuestionnairePage.vue'
+import deleteConfirmation from './deleteConfirmation.vue'
     export default {
         data(){
             return{
+                qnId:"",
+                quTitle:"",
+                qudesp:"",
+                quStartDate:"",
+                quEndDate:"",
                 key:0,
                 quizData:[],
                 indexArr:[],
@@ -53,8 +59,6 @@
 
         methods:{
 
-                
-                
                 showConfirmation(){
                     this.showDeleteConfirmation = true
                 },
@@ -123,8 +127,22 @@
                     var globalIndex = (this.currentPage-1)*10 +index
                     this.indexArr.push({qnId:this.quizData[globalIndex].questionnaire.id,currentPage:this.currentPage,index:index})
                     console.log(this.indexArr)
-                    console.log(this.quizData)
                     
+                },
+
+                goToCheckPage(index){
+                    var globalIndex = (this.currentPage-1)*10 +index
+                    this.qnId = this.quizData[globalIndex].questionnaire.id
+                    this.quTitle  = this.quizData[globalIndex].questionnaire.title
+                    this.qudesp = this.quizData[globalIndex].questionnaire.description
+                    this.quStartDate = this.quizData[globalIndex].questionnaire.startDate
+                    this.quEndDate = this.quizData[globalIndex].questionnaire.endDate
+                    console.log(this.qnId)
+                    console.log(this.quTitle)
+                    console.log(this.qudesp)
+                    console.log(this.quStartDate)
+                    console.log(this.quEndDate)
+                    this.$router.push('addQuestionnairePage')
                 },
 
             //     deleteData(){
@@ -281,7 +299,7 @@
                         <td>{{ quiz.questionnaire.id }}</td>
                     </div>
                     <div class="questionnaireTitle">
-                        <td>{{ quiz.questionnaire.title }}</td>
+                        <td @click="goToCheckPage(index)">{{ quiz.questionnaire.title }}</td>
                     </div>
 
                     <td>

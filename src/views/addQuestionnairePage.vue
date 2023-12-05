@@ -46,8 +46,7 @@ export default{
         this.currentDate =[toyear,tomonth,today].join('-')
         this.currentDate =currentDate
 
-
-
+        
         // const finalDate = document.getElementById("finalDate")
         // var plusDate =new Date().getDate()
         // const sevenDate =new Date().setDate(plusDate + 7)
@@ -93,7 +92,6 @@ export default{
             const newQuId = this.question.length + 1
             this.question.push({quId:newQuId,qTitle:this.question_list.qTitle,optionType:this.question_list.optionType
             ,isNecessary:this.question_list.necessary, option:this.question_list.option})
-
             console.log(this.question)
             console.log(this.questionnaire)
         },
@@ -342,7 +340,7 @@ export default{
             <div class="voteTitle">
                 <p>{{ voteQuestion.qTitle }}</p>
                 <p>請投給下列選項:</p>
-            </div>
+            </div>  
 
             <div class="voteRadio">
                 <div v-for="(qoption,index) in voteQuestion.option.split(';')" :key="index">

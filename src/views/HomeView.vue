@@ -50,7 +50,6 @@ export default {
         // finalDate.value = defaultDateAfterSeven
         // console.log(finalDate.value)
         this.fetchData();
-        console.log(typeof(this.currentDate))
     },
 
     computed:{
