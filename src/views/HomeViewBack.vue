@@ -9,6 +9,14 @@ import deleteConfirmation from './deleteConfirmation.vue'
                 qudesp:"",
                 quStartDate:"",
                 quEndDate:"",
+
+
+                quId:"",
+                qsTitle:"",
+                optionType:"",
+                isNecessary:false,
+                option:"",
+                question_list:[],
                 key:0,
                 quizData:[],
                 indexArr:[],
@@ -137,12 +145,39 @@ import deleteConfirmation from './deleteConfirmation.vue'
                     this.qudesp = this.quizData[globalIndex].questionnaire.description
                     this.quStartDate = this.quizData[globalIndex].questionnaire.startDate
                     this.quEndDate = this.quizData[globalIndex].questionnaire.endDate
-                    console.log(this.qnId)
-                    console.log(this.quTitle)
-                    console.log(this.qudesp)
-                    console.log(this.quStartDate)
-                    console.log(this.quEndDate)
-                    this.$router.push('addQuestionnairePage')
+
+                    this.question_list = this.quizData[globalIndex].question_list
+                    console.log(this.question_list)
+                    this.quId = this.question_list[0].quId
+                    this.qsTitle = this.question_list[0].qTitle
+                    this.optionType = this.question_list[0].optionType
+                    this.isNecessary = this.question_list[0].necessary
+                    this.option = this.question_list[0].option
+
+                    console.log(this.quId)
+                    console.log(this.qsTitle)
+                    console.log(this.optionType)
+                    console.log(this.isNecessary)
+                    console.log(this.option)
+                    
+
+
+                    this.$router.push({
+                        name:'addQuestionnairePage',
+                        query:{
+                            qnId:this.qnId,
+                            quTitle:this.quTitle,
+                            qudesp:this.qudesp,
+                            quStartDate:this.quStartDate,
+                            quEndDate:this.quEndDate,
+
+                            quId:this.quId,
+                            qsTitle:this.qsTitle,
+                            optionType:this.optionType,
+                            isNecessary:this.isNecessary,
+                            option:this.option,
+                        },
+                    })
                 },
 
             //     deleteData(){

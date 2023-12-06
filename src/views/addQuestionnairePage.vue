@@ -1,6 +1,10 @@
 <script>
 import deleteConfirmation from './deleteConfirmation.vue'
 export default{
+
+
+
+    
     data(){
         return{
             questionnaire:{
@@ -20,6 +24,21 @@ export default{
                     option: ""
                 }
             ],
+
+            questionListFromBack:[],
+
+            qnId:"",
+            quTitle:"",
+            qudesp:"",
+            quStartDate:"",
+            quEndDate:"",
+
+            quId:"",
+            qsTitle:"",
+            optionType:"",
+            isNecessary:false,
+            option:"",
+
             showDeleteConfirmation:false,
 
             question:[],
@@ -45,8 +64,39 @@ export default{
 
         this.currentDate =[toyear,tomonth,today].join('-')
         this.currentDate =currentDate
+        
+        
+        this.qnId = this.$route.query.qnId
+        this.quTitle = this.$route.query.quTitle
+        this.qudesp = this.$route.query.qudesp
+        this.quStartDate = this.$route.query.quStartDate
+        this.quEndDate =this.$route.query.quEndDate
+
+;
+        this.quId = this.$route.query.quId
+        this.qsTitle = this.$route.query.qsTitle
+        this.optionType = this.$route.query.optionType
+        this.isNecessary = this.$route.query.isNecessary
+        this.option =this.$route.query.option
 
         
+        console.log(this.qnId)
+        console.log(this.quTitle)
+        console.log(this.qudesp)
+        console.log(this.quStartDate)
+        console.log(this.quEndDate)
+
+        
+        this.question.quId = this.quId
+        this.question.qTitle = this.qsTitle
+        this.question.optionType = this.optionType
+        this.question.necessary = this.isNecessary
+        this.question.option = this.option
+        console.log(this.question)
+
+
+
+
         // const finalDate = document.getElementById("finalDate")
         // var plusDate =new Date().getDate()
         // const sevenDate =new Date().setDate(plusDate + 7)
@@ -195,22 +245,22 @@ export default{
     <div class="content">
             <div class="qnTitle">
                 <p>問卷名稱:</p>
-                <input type="text" v-model="questionnaire.title">
+                <input type="text" v-model="quTitle">
             </div>
 
             <div class="qndesp">
                 <p>問卷說明:</p>
-                <input type="text"  v-model="questionnaire.description">
+                <input type="text"  v-model="qudesp">
             </div>
 
             <div class="startTime">
                 <p>開始時間:</p>
-                <input type="date" id="startDate"  v-model="questionnaire.startDate">
+                <input type="date" id="startDate"  v-model="quStartDate">
             </div>
 
             <div class="endTime">
                 <p>結束時間:</p>
-                <input type="date" id="endDate"  v-model="questionnaire.endDate" @input="timeAnalysis">
+                <input type="date" id="endDate"  v-model="quEndDate" @input="timeAnalysis">
             </div>
 
             <div class="buttonZone">
@@ -291,6 +341,7 @@ export default{
         </div>
     </div>
 
+
     <div class="quButtonZone">
         <button type="button" @click="backToQnPage">上一步</button>
         <button type="button" @click="goToCheckPage">送出</button>
@@ -301,10 +352,10 @@ export default{
 <div class="checkZone" v-if="controlPage == 2">
     <div class="checkTimeZone">
         <div class="checkStartTime">
-            {{ questionnaire.startDate + "~" }}
+            {{ quStartDate + "~" }}
         </div>
         <div class="checkEndTime">
-            {{ questionnaire.endDate }}
+            {{ quEndDate }}
         </div>
     </div>
     <div class="checkTitleZone">
