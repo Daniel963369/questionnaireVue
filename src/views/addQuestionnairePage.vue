@@ -64,6 +64,7 @@ export default{
 
         this.currentDate =[toyear,tomonth,today].join('-')
         this.currentDate =currentDate
+
         
         
         this.qnId = this.$route.query.qnId
@@ -87,12 +88,25 @@ export default{
         console.log(this.quEndDate)
 
         
-        this.question.quId = this.quId
-        this.question.qTitle = this.qsTitle
-        this.question.optionType = this.optionType
-        this.question.necessary = this.isNecessary
-        this.question.option = this.option
+        // this.question.quId = this.quId
+        // this.question.qTitle = this.qsTitle
+        // this.question.optionType = this.optionType
+        // this.question.necessary = this.isNecessary
+        // this.question.option = this.option
+        this.question.push({
+        quId: this.quId,
+        qTitle: this.qsTitle,
+        optionType: this.optionType,
+        isNecessary: this.isNecessary,
+        option: this.option
+    });
+
+
         console.log(this.question)
+
+        
+        
+
 
 
 
@@ -342,7 +356,7 @@ export default{
     </div>
 
 
-    <div class="quButtonZone">
+    <div class="quButtonZone">  
         <button type="button" @click="backToQnPage">上一步</button>
         <button type="button" @click="goToCheckPage">送出</button>
     </div>
@@ -359,11 +373,11 @@ export default{
         </div>
     </div>
     <div class="checkTitleZone">
-        <p>{{ questionnaire.title }}</p>
+        <p>{{ quTitle }}</p>
     </div>
 
     <div class="checkDespZone">
-        <p>{{ questionnaire.description }}</p>
+        <p>{{ qudesp }}</p>
     </div>
 
     <div class="information">
