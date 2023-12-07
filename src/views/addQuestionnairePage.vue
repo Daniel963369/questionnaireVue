@@ -25,6 +25,8 @@ export default{
                 }
             ],
 
+            deleteQuestionList:[],
+
             questionListFromBack:[],
 
             qnId:"",
@@ -42,6 +44,7 @@ export default{
             showDeleteConfirmation:false,
 
             question:[],
+            question1:[],
 
             controlPage:0
         }
@@ -73,6 +76,12 @@ export default{
         this.quStartDate = this.$route.query.quStartDate
         this.quEndDate =this.$route.query.quEndDate
 
+        this.questionnaire.title = this.quTitle
+        this.questionnaire.description = this.qudesp
+        this.questionnaire.startDate = this.quStartDate
+        this.questionnaire.endDate = this.quEndDate
+        console.log(this.questionnaire)
+
 ;
         this.quId = this.$route.query.quId
         this.qsTitle = this.$route.query.qsTitle
@@ -88,11 +97,13 @@ export default{
         console.log(this.quEndDate)
 
         
-        // this.question.quId = this.quId
-        // this.question.qTitle = this.qsTitle
-        // this.question.optionType = this.optionType
-        // this.question.necessary = this.isNecessary
-        // this.question.option = this.option
+        this.question.quId = this.quId
+        this.question.qTitle = this.qsTitle
+        this.question.optionType = this.optionType
+        this.question.necessary = this.isNecessary
+        this.question.option = this.option
+
+
         this.question.push({
         quId: this.quId,
         qTitle: this.qsTitle,
@@ -104,33 +115,34 @@ export default{
 
         console.log(this.question)
 
-        
-        
-
-
-
-
-
-        // const finalDate = document.getElementById("finalDate")
-        // var plusDate =new Date().getDate()
-        // const sevenDate =new Date().setDate(plusDate + 7)
-        // const sevenDatetime = new Date(sevenDate)
-
-
-
-        // const todayAfterSeven =sevenDatetime.toLocaleString(undefined,day).slice(0,-1)
-        // const tomonthAfterSeven =sevenDatetime.toLocaleString(undefined,month).slice(0,-1)
-        // const toyearAfterSeven =sevenDatetime.toLocaleString(undefined,year).slice(0,-1)
-        // const defaultDateAfterSeven = [toyearAfterSeven,tomonthAfterSeven,todayAfterSeven].join('-')
-        // console.log(defaultDateAfterSeven)
-        // finalDate.value = defaultDateAfterSeven
-        // console.log(finalDate.value)
     },
 
 
 
 
     methods:{
+
+        updateQuestion(){
+            const updateUrl = "localhost:8080/api/quiz/update";
+
+            const dataToUpdate = {
+                questionnaire:this.questionnaire,
+                question_list:this.question,
+                deleteQuestionList:this.deleteQuestionList
+            };
+
+            fetch(updateUrl,{
+                method:"post",
+                headers:{
+                    "Content-Type": "application/json",
+                },
+                body:JSON.stringify(dataToUpdate),
+            })
+            .then((response) => response.json())
+            .then((data) => {
+                console.log("问卷更新成功", data);
+            })
+        },
 
         showConfirmation(){
             this.showDeleteConfirmation = true
@@ -201,6 +213,8 @@ export default{
 
 
         saveQuestionnaire() {
+        
+
         const saveUrl = "http://localhost:8080/api/quiz/create";
         const dataToSend = {
             questionnaire:this.questionnaire,
@@ -259,22 +273,22 @@ export default{
     <div class="content">
             <div class="qnTitle">
                 <p>問卷名稱:</p>
-                <input type="text" v-model="quTitle">
+                <input type="text" v-model="questionnaire.title">
             </div>
 
             <div class="qndesp">
                 <p>問卷說明:</p>
-                <input type="text"  v-model="qudesp">
+                <input type="text"  v-model="questionnaire.description">
             </div>
 
             <div class="startTime">
                 <p>開始時間:</p>
-                <input type="date" id="startDate"  v-model="quStartDate">
+                <input type="date" id="startDate"  v-model="questionnaire.startDate">
             </div>
 
             <div class="endTime">
                 <p>結束時間:</p>
-                <input type="date" id="endDate"  v-model="quEndDate" @input="timeAnalysis">
+                <input type="date" id="endDate"  v-model="questionnaire.endDate" @input="timeAnalysis">
             </div>
 
             <div class="buttonZone">
@@ -366,18 +380,18 @@ export default{
 <div class="checkZone" v-if="controlPage == 2">
     <div class="checkTimeZone">
         <div class="checkStartTime">
-            {{ quStartDate + "~" }}
+            {{ questionnaire.startDate + "~" }}
         </div>
         <div class="checkEndTime">
-            {{ quEndDate }}
+            {{ questionnaire.endDate }}
         </div>
     </div>
     <div class="checkTitleZone">
-        <p>{{ quTitle }}</p>
+        <p>{{ questionnaire.title }}</p>
     </div>
 
     <div class="checkDespZone">
-        <p>{{ qudesp }}</p>
+        <p>{{ questionnaire.description }}</p>
     </div>
 
     <div class="information">
@@ -423,7 +437,7 @@ export default{
 
     <div class="checkButtonZone">
         <button type="button" @click="backToQuPage">取消並返回上一頁</button>
-        <button type="button" @click="submitQuestionnaire">儲存並發布</button>
+        <button type="button" @click="submitQuestionnaire,updateQuestion">儲存並發布</button>
     </div>
 
 </div>
