@@ -24,7 +24,7 @@ export default{
                     option: ""
                 }
             ],
-
+            
             deleteQuestionList:[],
 
             questionListFromBack:[],
@@ -34,6 +34,7 @@ export default{
             qudesp:"",
             quStartDate:"",
             quEndDate:"",
+            quPublished:"",
 
             quId:"",
             qsTitle:"",
@@ -44,6 +45,16 @@ export default{
             showDeleteConfirmation:false,
 
             question:[],
+
+            //更新用陣列
+            questionnaire1:{
+                id:"",
+                title:"",
+                description:"",
+                published:"true",
+                startDate:"",
+                endDate:"",
+            },
             question1:[],
 
             controlPage:0
@@ -73,8 +84,10 @@ export default{
         this.qnId = this.$route.query.qnId
         this.quTitle = this.$route.query.quTitle
         this.qudesp = this.$route.query.qudesp
+        this.quPublished = this.$route.query.quPublished
         this.quStartDate = this.$route.query.quStartDate
         this.quEndDate =this.$route.query.quEndDate
+        
 
         this.questionnaire.title = this.quTitle
         this.questionnaire.description = this.qudesp
@@ -104,6 +117,14 @@ export default{
         this.question.option = this.option
 
 
+
+        this.questionnaire1.id = this.qnId
+        this.questionnaire1.title = this.quTitle
+        this.questionnaire1.description = this.qudesp
+        this.questionnaire1.published =this.quPublished
+        this.questionnaire1.startDate = this.quStartDate
+        this.questionnaire1.endDate = this.quEndDate
+
         this.question.push({
         quId: this.quId,
         qTitle: this.qsTitle,
@@ -111,9 +132,28 @@ export default{
         isNecessary: this.isNecessary,
         option: this.option
     });
+    console.log(this.question)
+
+    this.question1.push({
+        qnId:this.qnId,
+        quId: this.quId,
+        qTitle: this.qsTitle,
+        optionType: this.optionType,
+        necessary: this.isNecessary,
+        option: this.option
+    });
+
+    this.deleteQuestionList.push({
+        qnId:this.qnId,
+        quId:this.quId,
+    });
+    
 
 
         console.log(this.question)
+        console.log(this.questionnaire1)
+        console.log(this.question1)
+        console.log(this.deleteQuestionList)
 
     },
 
@@ -121,16 +161,30 @@ export default{
 
 
     methods:{
+        updateOrCreate(){
+            if(this.qnId > 1){
+                this.submitUpdateQuestionnaire();
+            }
+            else{
+                this.submitQuestionnaire();
+            }
+        },
+
+        submitUpdateQuestionnaire(){
+            this.updateQuestion();
+            this.$router.push('/HomeViewBack')
+        },
 
         updateQuestion(){
-            const updateUrl = "localhost:8080/api/quiz/update";
+            const updateUrl = "http://localhost:8080/api/quiz/update";
 
             const dataToUpdate = {
-                questionnaire:this.questionnaire,
-                question_list:this.question,
+                questionnaire:this.questionnaire1,
+                question_list:this.question1,
                 deleteQuestionList:this.deleteQuestionList
             };
 
+            console.log(dataToUpdate)
             fetch(updateUrl,{
                 method:"post",
                 headers:{
@@ -140,9 +194,18 @@ export default{
             })
             .then((response) => response.json())
             .then((data) => {
+                console.log("收到後端響應",data);
                 console.log("问卷更新成功", data);
+                console.log(dataToUpdate)
+                console.log(this.questionnaire1)
+                console.log(this.question1)
+                console.log(this.deleteQuestionList)
             })
+            .catch((error) => {
+            console.error("更新问卷时发生错误：", error);
+            });
         },
+
 
         showConfirmation(){
             this.showDeleteConfirmation = true
@@ -437,7 +500,7 @@ export default{
 
     <div class="checkButtonZone">
         <button type="button" @click="backToQuPage">取消並返回上一頁</button>
-        <button type="button" @click="submitQuestionnaire,updateQuestion">儲存並發布</button>
+        <button type="button" @click="updateOrCreate">儲存並發布</button>
     </div>
 
 </div>

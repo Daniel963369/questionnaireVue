@@ -145,6 +145,7 @@ import deleteConfirmation from './deleteConfirmation.vue'
                     this.qudesp = this.quizData[globalIndex].questionnaire.description
                     this.quStartDate = this.quizData[globalIndex].questionnaire.startDate
                     this.quEndDate = this.quizData[globalIndex].questionnaire.endDate
+                    this.quPublished = this.quizData[globalIndex].questionnaire.published
 
                     this.question_list = this.quizData[globalIndex].question_list
                     console.log(this.question_list)
@@ -170,6 +171,7 @@ import deleteConfirmation from './deleteConfirmation.vue'
                             qudesp:this.qudesp,
                             quStartDate:this.quStartDate,
                             quEndDate:this.quEndDate,
+                            quPublished:this.quPublished,
 
                             quId:this.quId,
                             qsTitle:this.qsTitle,
