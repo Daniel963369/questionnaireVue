@@ -24,7 +24,7 @@ export default {
                 phoneNumber:"",
                 email:"",
                 age:"",
-                radioValue:"",
+                ans:"",
             },
             
         }
@@ -73,8 +73,12 @@ export default {
                 <p>{{ questionnaireData.startDate + "~" }}</p>
                 <p>{{ questionnaireData.endDate}}</p>
             </div>
-            <p>{{ questionnaireData.title }}</p>
-            <p>{{ questionnaireData.description }}</p>
+            <div class="questionnaireTitle">
+                <p>{{ questionnaireData.title }}</p>
+            </div>
+            <div class="questionnaireDesp">
+                <p>{{ questionnaireData.description }}</p>
+            </div>
         </div>
 
         <div class="information">
@@ -134,8 +138,12 @@ export default {
                 <p>{{ questionnaireData.startDate + "~" }}</p>
                 <p>{{ questionnaireData.endDate}}</p>
             </div>
-            <p>{{ questionnaireData.title }}</p>
-            <p>{{ questionnaireData.description }}</p>
+            <div class="questionnaireTitle1">
+                <p>{{ questionnaireData.title }}</p>
+            </div>
+            <div class="questionnaireDesp1">
+                <p>{{ questionnaireData.description }}</p>
+            </div>
         </div>
 
         <div class="information1">
@@ -192,19 +200,30 @@ export default {
 .answerZone{
     width:100%;
     height:100%;
-    background-color:palegreen;
+    background-color:darkcyan;
 
     .questionnaireData{
         width:100%;
 
 
         .questionnaireTime{
+            font-size:18pt;
+            color:beige;
             display:flex;
             width:100%;
             margin-left:80%;
         }
 
-        p{
+        .questionnaireTitle{
+            text-align:center;
+            font-size:26pt;
+            color:beige;
+            font-weight:bold;
+        }
+
+        .questionnaireDesp{
+            font-size:16pt;
+            color:beige;
             text-align:center;
         }
     }
@@ -217,11 +236,14 @@ export default {
 
             .voteTitle{
                 text-align:center;
+                color:beige;
             }
             .voteRadio{
                 width:100vw;
                 display:flex;
                 flex-direction:column;
+                color:beige;
+                margin-bottom:3%;
             }
         }
 
@@ -235,15 +257,22 @@ export default {
         
         .name{
             margin-bottom:1%;
+            color:beige;
         }
         .phoneNumber{
             margin-right:2%;
             margin-bottom:1%;
+            color:beige;
         }
 
         .mail{
             margin-right:0.5%;
             margin-bottom:1%;
+            color:beige;
+        }
+
+        .age{
+            color:beige;
         }
     }
 
@@ -252,11 +281,24 @@ export default {
     .reasonZone{
         text-align:center;
         margin-top:2%;
+        color:beige;
+        p{
+            margin-left:2%;
+        }
+
+        input{
+            margin-left:3%;
+        }
     }
 
     .checkButtonZone{
         margin-left:60%;
         margin-top:3%;
+        button{
+            width:5vw;
+            background-color:blue;
+            color:white;
+        }
     }
 
 }
@@ -264,19 +306,30 @@ export default {
 .checkAnswerZone{
     width:100%;
     height:100%;
-    background-color:palegreen;
+    background-color:darkcyan;
 
         .questionnaireData1{
             width:100%;
 
 
         .questionnaireTime1{
+            font-size:18pt;
+            color:beige;
             display:flex;
             width:100%;
             margin-left:80%;
         }
 
-        p{
+        .questionnaireTitle1{
+            text-align:center;
+            font-size:26pt;
+            color:beige;
+            font-weight:bold;
+        }
+
+        .questionnaireDesp1{
+            font-size:16pt;
+            color:beige;
             text-align:center;
         }
     }
@@ -288,23 +341,33 @@ export default {
             text-align:center;
             margin-top:2%;
             
-            .name{
+            .name1{
                 margin-bottom:1%;
+                color:beige;
             }
-            .phoneNumber{
+            .phoneNumber1{
                 margin-right:2%;
                 margin-bottom:1%;
+                color:beige;
             }
 
-            .mail{
+            .mail1{
                 margin-right:0.5%;
                 margin-bottom:1%;
+                color:beige;
+            }
+
+            .age1{
+                margin-right:0.5%;
+                margin-bottom:1%;
+                color:beige;
             }
         }
 
         .reasonZone1{
             text-align:center;
             margin-top:2%;
+            color:beige;
         }
 
         
@@ -316,11 +379,14 @@ export default {
 
             .voteTitle1{
                 text-align:center;
+                color:beige;
             }
             .voteRadio1{
                 width:100vw;
                 display:flex;
                 flex-direction:column;
+                color:beige;
+                margin-bottom:3%;
             }
         }
 

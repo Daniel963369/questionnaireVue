@@ -3,56 +3,37 @@ export default {
     data(){
         return{
             key:0,
+            
+            //資料庫問卷及問題的陣列
             quizData:[],
+
+            //分頁
             perpage:10,
             currentPage:1,
+
+            //時間
             currentDate:new Date(),
+
+            //搜尋的日期
             searchName:"",
             searchStartDate:"",
             searchEndDate:"",
+            //控制頁面的變數
             page:0,
+
+            //問題的陣列
             question:[],
         }
     },
 
     mounted(){
-        const startDate = document.getElementById("startDate")
-        const currentDate = new Date()
-        const day = {day:'numeric'}
-        const year = {year:'numeric'}
-        const month = {month:'long'}
-        const today = currentDate.toLocaleString(undefined,day).slice(0,-1)
-        const tomonth = currentDate.toLocaleString(undefined,month).slice(0,-1)
-        const toyear = currentDate.toLocaleString(undefined,year).slice(0,-1)
-        const defaultDate =[toyear,tomonth,today].join('-')
-        startDate.value = defaultDate
-        this.currentDate =[toyear,tomonth,today].join('-')
-        this.currentDate =currentDate
-        
-
-
-        
-
-
-
-        // const finalDate = document.getElementById("finalDate")
-        // var plusDate =new Date().getDate()
-        // const sevenDate =new Date().setDate(plusDate + 7)
-        // const sevenDatetime = new Date(sevenDate)
-
-
-
-        // const todayAfterSeven =sevenDatetime.toLocaleString(undefined,day).slice(0,-1)
-        // const tomonthAfterSeven =sevenDatetime.toLocaleString(undefined,month).slice(0,-1)
-        // const toyearAfterSeven =sevenDatetime.toLocaleString(undefined,year).slice(0,-1)
-        // const defaultDateAfterSeven = [toyearAfterSeven,tomonthAfterSeven,todayAfterSeven].join('-')
-        // console.log(defaultDateAfterSeven)
-        // finalDate.value = defaultDateAfterSeven
-        // console.log(finalDate.value)
         this.fetchData();
+
     },
 
     computed:{
+
+        //分頁控制
         totalPage(){
             return Math.ceil(this.quizData.length/this.perpage)
         },
@@ -70,47 +51,27 @@ export default {
 
     methods:{
 
+            //前往後台
             goToBack(){
                 this.$router.push('./HomeViewBack')
             },
 
+            //返回首頁
             goToHomePage(){
                 this.page = 0
             },
+
+            //前往確認頁
             goToCheckPage(){
                 this.page = 2
             },
 
+            //搜尋的方法
             search(){
                     this.fetchData({title:this.searchName,startDate: this.startDate, endDate: this.endDate})
             },
 
-            // goToQuestion(quiz){
-            //     this.$router.push({name:'Answer',params:{questionnaireContent:JSON.stringify({
-            //         questionnaire:quiz.questionnaire,
-            //         question:quiz.question
-            //     })}});
-            // },
 
-
-            // goToBack(){
-            //     this.$router.push('./HomeViewBack')
-            // },
-
-        //     goToQuestion(quiz) {
-        // // 创建新的对象，只包含需要的属性
-        //     const serializedQuiz = {
-        //         questionnaire: quiz.questionnaire,
-        //         question: quiz.question
-        //     };
-
-        //     this.$router.push({
-        //         name: 'Answer',
-        //         params: {
-        //             questionnaireContent: JSON.stringify(serializedQuiz)
-        //         }
-        //     });
-        // },
 
             goToQuestion(quiz) {
                 this.$router.push({
@@ -155,13 +116,7 @@ export default {
             .catch((error) => console.error("Error:", error))
             .then((response) => {
                 this.quizData = response.quizVoList.filter(quiz => quiz.questionnaire.published);
-                // const newQuId = this.question.length + 1
-                // this.question.push({qnId:newQuId,qTitle:this.quizData[0].question_list.qTitle,optionType:this.quizData[0].question_list.optionType,
-                //     isNecessary:this.quizData[0].necessary, option:this.quizData[0].option})
-
-                    
-
-            
+                console.log(this.quizData)
             });
             }
     },
@@ -195,12 +150,24 @@ export default {
         <div class="tableContent">
         <table>
             <tr class="headerTr">
-                <td>#</td>
-                <td>問卷</td>
-                <td>狀態</td>
-                <td>開始時間</td>
-                <td>結束時間</td>
-                <td>觀看統計</td>
+                <div class="qnId">
+                    <td>#</td>
+                </div>
+                <div class="questionnaireContent">
+                    <td>問卷</td>
+                </div>
+                <div class="status">
+                    <td>狀態</td>
+                </div>
+                <div class="qnStartTime">
+                    <td>開始時間</td>
+                </div>
+                <div class="qnEndTime">
+                    <td>結束時間</td>
+                </div>
+                <div class="viewStatic">
+                    <td>觀看統計</td>
+                </div>
             </tr>
             <tr v-for="(quiz,index) in quizData.slice(pageStart,pageEnd)" :key="index">
                 <div class="ContentTr">
@@ -266,7 +233,7 @@ export default {
 .body{
     width:100%;
     height:100%;
-    background-color:palegreen;
+    background-color:darkcyan;
 .header{
     width:100vw;
     height:10vh;
@@ -366,10 +333,65 @@ export default {
 
             .headerTr{
                 display:flex;
+                justify-content:space-around;
                 border:1px solid black;
                 width:90vw;
-                justify-content:space-around;
                 color:blue;
+
+                .qnId{
+                    width:15%;
+                    
+                    td{
+                        width:13.5vw;
+                        text-align:center;
+                        
+                    }
+                }
+
+                .questionnaireContent{
+                    width:25%;
+
+                    td{
+                        width: 22.5vw;
+                        text-align:center;
+                    }
+                }
+
+                .status{
+                    width:10%;
+
+                    td{
+                        width:9vw;
+                        text-align:center;
+                    }
+                }
+
+                .qnStartTime{
+                    width:15%;
+
+                    td{
+                        width:13.5vw;
+                        text-align:center;
+                    }
+                }
+
+                .qnEndTime{
+                    width:15%;
+
+                    td{
+                        width:13.5vw;
+                        text-align:center;
+                    }
+                }
+
+                .viewStatic{
+                    width:10%;
+
+                    td{
+                        width:9vw;
+                        text-align:center;
+                    }
+                }
                 
             }
 
@@ -377,40 +399,69 @@ export default {
                 border:3px solid palevioletred;
                 margin-top:1%;
                 display:flex;
-                position:relative;
+                justify-content:space-around;
 
                 .questionnaireId{
-                    text-align:center;
-                    color:blue;
-                    margin-left:6%;
+                    width:13.5vw;
+                    
+
+                    td{
+                        width:13.5vw;
+                        text-align:center;
+                        color:blue;
+
+                    }
                 }
 
                 .questionnaireTitle{
+                    width:22.5vw;
                     color:blue;
-                    margin-left:9%;
                     
+                    
+                    td{
+                        width:22.5vw;
+                        text-align:center;
+                    }
                 }
 
                 .whetherPublished{
-                    position:relative;
-                    left:270%;
-                    color:blue;
+                    width:9vw;
+                    display:flex;
+                    justify-content: center;
                     
+                    span{
+                        
+                        color:blue;
+                        text-align:center;
+                    }
                 }
 
                 .questionnaireStartDate{
                     color:blue;
-                    margin-left:22%;
+                    width:13.5vw;
+                    td{
+                        width:13.5vw;
+                        text-align:center;
+                    }
                 }
 
                 .questionnaireEndDate{
                     color:blue;
-                    margin-left:12%;
+                    width:13.5vw;
+                    td{
+                        width:13.5vw;
+                        text-align:center;
+                    }
                 }
 
                 .questionnaireView{
-                    color:blue;
-                    margin-left:12%;
+                    width:9vw;
+
+                    td{
+                        width:9vw;
+                        text-align: center;
+                        color:blue;
+                    }
                 }
             }
 

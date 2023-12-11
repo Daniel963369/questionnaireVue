@@ -10,12 +10,6 @@ import deleteConfirmation from './deleteConfirmation.vue'
                 quStartDate:"",
                 quEndDate:"",
 
-
-                quId:"",
-                qsTitle:"",
-                optionType:"",
-                isNecessary:false,
-                option:"",
                 question_list:[],
                 key:0,
                 quizData:[],
@@ -147,19 +141,8 @@ import deleteConfirmation from './deleteConfirmation.vue'
                     this.quEndDate = this.quizData[globalIndex].questionnaire.endDate
                     this.quPublished = this.quizData[globalIndex].questionnaire.published
 
-                    this.question_list = this.quizData[globalIndex].question_list
-                    console.log(this.question_list)
-                    this.quId = this.question_list[0].quId
-                    this.qsTitle = this.question_list[0].qTitle
-                    this.optionType = this.question_list[0].optionType
-                    this.isNecessary = this.question_list[0].necessary
-                    this.option = this.question_list[0].option
 
-                    console.log(this.quId)
-                    console.log(this.qsTitle)
-                    console.log(this.optionType)
-                    console.log(this.isNecessary)
-                    console.log(this.option)
+
                     
 
 
@@ -172,12 +155,6 @@ import deleteConfirmation from './deleteConfirmation.vue'
                             quStartDate:this.quStartDate,
                             quEndDate:this.quEndDate,
                             quPublished:this.quPublished,
-
-                            quId:this.quId,
-                            qsTitle:this.qsTitle,
-                            optionType:this.optionType,
-                            isNecessary:this.isNecessary,
-                            option:this.option,
                         },
                     })
                 },
@@ -322,13 +299,25 @@ import deleteConfirmation from './deleteConfirmation.vue'
             <div class="tableContent">
             <table>
                 <tr class="headerTr">
+                <div class="qnId">
                     <td>#</td>
+                </div>
+                <div class="questionnaireContent">
                     <td>問卷</td>
+                </div>
+                <div class="status">
                     <td>狀態</td>
+                </div>
+                <div class="qnStartTime">
                     <td>開始時間</td>
+                </div>
+                <div class="qnEndTime">
                     <td>結束時間</td>
+                </div>
+                <div class="viewStatic">
                     <td>觀看統計</td>
-                </tr>
+                </div>
+            </tr>
                 <tr v-for="(quiz,index) in quizData.slice(pageStart,pageEnd)" :key="index">
                     <div class="contentTr">
                     <div class="questionnaireId">
@@ -389,7 +378,7 @@ import deleteConfirmation from './deleteConfirmation.vue'
     .body{
         width:100%;
         height:100%;
-        background-color:palegreen;
+        background-color:darkcyan;
     .header{
         width:100vw;
         height:10vh;
@@ -499,53 +488,144 @@ import deleteConfirmation from './deleteConfirmation.vue'
 
             .tableContent{
                 .headerTr{
-                    display:flex;
-                    border:1px solid black;
-                    width:90vw;
-                    justify-content:space-around;
-                    color:blue;
-                }
+                display:flex;
+                justify-content:space-around;
+                border:1px solid black;
+                width:90vw;
+                color:blue;
 
-                .contentTr{
-                    border:3px solid palevioletred;
-                    margin-top:1%;
-                    display:flex;
-                    position:relative;
-
-                    .questionnaireId{
-                        display:flex;
-                        color:blue;
-                        margin-left:6%;
-                    }
-
-                    .questionnaireTitle{
-                    color:blue;
-                    margin-left:9%;
+                .qnId{
+                    width:15%;
                     
-                }
-
-                    .whetherPublished{
-                        position:relative;
-                        left:270%;
-                        color:blue;
+                    td{
+                        width:13.5vw;
+                        text-align:center;
                         
                     }
+                }
 
-                    .questionnaireStartDate{
-                        color:blue;
-                        margin-left:22%;
-                    }
+                .questionnaireContent{
+                    width:25%;
 
-                    .questionnaireEndDate{
-                        color:blue;
-                        margin-left:12%;
-                    }
-
-                    .questionnaireView{
-                        color:blue;
-                        margin-left:12%;
+                    td{
+                        width: 22.5vw;
+                        text-align:center;
                     }
                 }
+
+                .status{
+                    width:10%;
+
+                    td{
+                        width:9vw;
+                        text-align:center;
+                    }
+                }
+
+                .qnStartTime{
+                    width:15%;
+
+                    td{
+                        width:13.5vw;
+                        text-align:center;
+                    }
+                }
+
+                .qnEndTime{
+                    width:15%;
+
+                    td{
+                        width:13.5vw;
+                        text-align:center;
+                    }
+                }
+
+                .viewStatic{
+                    width:10%;
+
+                    td{
+                        width:9vw;
+                        text-align:center;
+                    }
+                }
+                
+            }
+
+            .contentTr{
+                border:3px solid palevioletred;
+                margin-top:1%;
+                display:flex;
+                justify-content:space-around;
+
+                .questionnaireId{
+                    display:flex;
+                    width:13.5vw;
+
+                    input{
+                        border:1px solid black;
+                        margin-left:25%;
+                    }
+                    
+
+                    td{
+                        width:5vw;
+                        text-align:center;
+                        color:blue;
+
+                    }
+                }
+
+                .questionnaireTitle{
+                    width:22.5vw;
+                    color:blue;
+                    
+                    
+                    td{
+                        width:22.5vw;
+                        text-align:center;
+                    }
+                }
+
+                .whetherPublished{
+                    width:9vw;
+                    display:flex;
+                    justify-content: center;
+                    
+                    span{
+                        
+                        color:blue;
+                        text-align:center;
+                    }
+                }
+
+                .questionnaireStartDate{
+                    color:blue;
+                    width:13.5vw;
+                    td{
+                        width:13.5vw;
+                        text-align:center;
+                    }
+                }
+
+                .questionnaireEndDate{
+                    color:blue;
+                    width:13.5vw;
+                    td{
+                        width:13.5vw;
+                        text-align:center;
+                    }
+                }
+
+                .questionnaireView{
+                    width:9vw;
+
+                    td{
+                        width:9vw;
+                        text-align: center;
+                        color:blue;
+                    }
+                }
+            }
             }
         }
 

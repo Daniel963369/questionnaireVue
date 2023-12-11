@@ -8,6 +8,7 @@ export default{
     data(){
         return{
             questionnaire:{
+                id:"",
                 title:"",
                 description:"",
                 published:"",
@@ -65,22 +66,7 @@ export default{
         },
 
     mounted(){
-        const startDate = document.getElementById("startDate")
-        const currentDate = new Date()
-        const day = {day:'numeric'}
-        const year = {year:'numeric'}
-        const month = {month:'long'}
-        const today = currentDate.toLocaleString(undefined,day).slice(0,-1)
-        const tomonth = currentDate.toLocaleString(undefined,month).slice(0,-1)
-        const toyear = currentDate.toLocaleString(undefined,year).slice(0,-1)
-        const defaultDate =[toyear,tomonth,today].join('-')
-        startDate.value = defaultDate
 
-        this.currentDate =[toyear,tomonth,today].join('-')
-        this.currentDate =currentDate
-
-        
-        
         this.qnId = this.$route.query.qnId
         this.quTitle = this.$route.query.quTitle
         this.qudesp = this.$route.query.qudesp
@@ -95,26 +81,20 @@ export default{
         this.questionnaire.endDate = this.quEndDate
         console.log(this.questionnaire)
 
-;
-        this.quId = this.$route.query.quId
-        this.qsTitle = this.$route.query.qsTitle
-        this.optionType = this.$route.query.optionType
-        this.isNecessary = this.$route.query.isNecessary
-        this.option =this.$route.query.option
+        if(this.qnId >1){
+            this.questionnaire.id = this.qnId
+            this.questionnaire.published = this.quPublished
+            this.fetchQuestionList();
+        }
+
+
 
         
-        console.log(this.qnId)
-        console.log(this.quTitle)
-        console.log(this.qudesp)
-        console.log(this.quStartDate)
-        console.log(this.quEndDate)
 
         
-        this.question.quId = this.quId
-        this.question.qTitle = this.qsTitle
-        this.question.optionType = this.optionType
-        this.question.necessary = this.isNecessary
-        this.question.option = this.option
+
+
+
 
 
 
@@ -125,35 +105,21 @@ export default{
         this.questionnaire1.startDate = this.quStartDate
         this.questionnaire1.endDate = this.quEndDate
 
-        this.question.push({
-        quId: this.quId,
-        qTitle: this.qsTitle,
-        optionType: this.optionType,
-        isNecessary: this.isNecessary,
-        option: this.option
-    });
-    console.log(this.question)
 
-    this.question1.push({
-        qnId:this.qnId,
-        quId: this.quId,
-        qTitle: this.qsTitle,
-        optionType: this.optionType,
-        necessary: this.isNecessary,
-        option: this.option
-    });
 
-    this.deleteQuestionList.push({
-        qnId:this.qnId,
-        quId:this.quId,
-    });
+
+    // this.deleteQuestionList.push({
+    //     qnId:this.qnId,
+    //     quId:this.quId,
+    // });
     
 
 
         console.log(this.question)
         console.log(this.questionnaire1)
         console.log(this.question1)
-        console.log(this.deleteQuestionList)
+        console.log(this.questionnaire)
+        // console.log(this.deleteQuestionList)
 
     },
 
@@ -162,7 +128,7 @@ export default{
 
     methods:{
         updateOrCreate(){
-            if(this.qnId > 1){
+            if(this.qnId >= 1){
                 this.submitUpdateQuestionnaire();
             }
             else{
@@ -175,13 +141,37 @@ export default{
             this.$router.push('/HomeViewBack')
         },
 
+        fetchQuestionList(){
+            const url = 'http://localhost:8080/api/quiz/searchQuestionList';
+            const queryParams = new URLSearchParams({
+                qnId:this.qnId
+            })
+            const urlWithParams = `${url}?${queryParams}`;
+            
+            fetch(urlWithParams, {
+            method: "GET", 
+            headers: new Headers({
+                "Content-Type": "application/json",
+            }),
+            })
+            .then((response) => response.json())
+            .catch((error) => console.error("Error:", error))
+            .then((data) => {
+                console.log(data)
+                this.question = data.questionList
+                console.log(this.question)
+                this.question1 = data.questionList
+                console.log(this.question1)
+            });
+            },
+
         updateQuestion(){
             const updateUrl = "http://localhost:8080/api/quiz/update";
 
             const dataToUpdate = {
-                questionnaire:this.questionnaire1,
+                questionnaire:this.questionnaire,
                 question_list:this.question1,
-                deleteQuestionList:this.deleteQuestionList
+                // deleteQuestionList:this.deleteQuestionList
             };
 
             console.log(dataToUpdate)
@@ -197,9 +187,9 @@ export default{
                 console.log("收到後端響應",data);
                 console.log("问卷更新成功", data);
                 console.log(dataToUpdate)
-                console.log(this.questionnaire1)
+                console.log(this.questionnaire)
                 console.log(this.question1)
-                console.log(this.deleteQuestionList)
+                // console.log(this.deleteQuestionList)
             })
             .catch((error) => {
             console.error("更新问卷时发生错误：", error);
@@ -229,10 +219,18 @@ export default{
 
         transmitQu(){
             const newQuId = this.question.length + 1
-            this.question.push({quId:newQuId,qTitle:this.question_list.qTitle,optionType:this.question_list.optionType
-            ,isNecessary:this.question_list.necessary, option:this.question_list.option})
+            if(this.qnId >1){
+                this.question.push({qnId:this.qnId,quId:newQuId,qTitle:this.question_list.qTitle,optionType:this.question_list.optionType
+            ,necessary:this.question_list.necessary, option:this.question_list.option})
             console.log(this.question)
             console.log(this.questionnaire)
+            }
+            else{
+                this.question.push({quId:newQuId,qTitle:this.question_list.qTitle,optionType:this.question_list.optionType
+            ,necessary:this.question_list.necessary, option:this.question_list.option})
+            console.log(this.question)
+            console.log(this.questionnaire)
+            }
         },
 
         goToAddPageQu(){
@@ -293,6 +291,8 @@ export default{
             .then((response) => response.json())
             .then((data) => {
             console.log("Questionnaire saved successfully", data);
+            dataToSend.question_list = this.question
+            
             // 在這裡可以執行成功保存後的操作
             })
             .catch((error) => {
@@ -300,6 +300,8 @@ export default{
             });
 
             console.log(dataToSend)
+            console.log(dataToSend.question_list)
+            console.log(this.question)
         },
 
         goToNextPage() {
@@ -334,6 +336,34 @@ export default{
     </div>
         
     <div class="content">
+            <div class="qnTitle">
+                <p>問卷名稱:</p>
+                <input type="text" v-model="questionnaire.title">
+            </div>
+
+            <div class="qndesp">
+                <p>問卷說明:</p>
+                <input type="text"  v-model="questionnaire.description">
+            </div>
+
+            <div class="startTime">
+                <p>開始時間:</p>
+                <input type="date" id="startDate"  v-model="questionnaire.startDate">
+            </div>
+
+            <div class="endTime">
+                <p>結束時間:</p>
+                <input type="date" id="endDate"  v-model="questionnaire.endDate" @input="timeAnalysis">
+            </div>
+
+            <div class="buttonZone">
+                <button type="button">取消</button>
+                <button type="button" @click="goToNextPage">下一步</button>
+            </div>
+
+        </div>
+
+        <div class="content">
             <div class="qnTitle">
                 <p>問卷名稱:</p>
                 <input type="text" v-model="questionnaire.title">
@@ -514,18 +544,9 @@ export default{
 .body{
     width:100vw;
     height:100vh;
-    background-color:palegreen;
+    background-color:darkcyan;
     position: relative;
 
-    &.show-deleteConfirmation {
-        background-color: rgba(0, 0, 0, 0.5); // 遮罩层颜色和透明度
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        z-index: 100; // 保证在最上层
-    }
 
     .header{
     width:100vw;
@@ -619,7 +640,7 @@ export default{
 }
 
 .quZone{
-    background-color:palegreen;
+    background-color:darkcyan;
     width:100vw;
     height:100vh;
     .quheader{
@@ -706,7 +727,7 @@ export default{
             display:flex;
             margin-top:2%;
             justify-content:space-around;
-            background-color:palegreen;
+            background-color:darkcyan;
             width:60%;
             margin:0 20%;
 
@@ -736,7 +757,7 @@ export default{
 .checkZone{
     width:100%;
     height:100%;
-    background-color:palegreen;
+    background-color:darkcyan;
 
     .checkTimeZone{
         display:flex;
