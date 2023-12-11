@@ -24,10 +24,11 @@ export default {
                 phoneNumber:"",
                 email:"",
                 age:"",
-                ans:"",
             },
+
+            userList:[]
             
-        }
+        }   
     },
 
 
@@ -45,6 +46,16 @@ export default {
     this.question = serializedObject.question_list || [];
     console.log(this.questionnaireData);
     console.log(this.question);
+    this.userList.qnId = this.questionnaireData.id
+    console.log(this.userList.qnId)
+
+
+    for(let i = 0;i<this.question.length;i++){
+        this.userList.qId = this.question[i].quId
+    }
+    console.log(this.userList.qId)
+
+
     
 
 
@@ -58,7 +69,42 @@ export default {
         },
 
         goToHomePage(){
+            this.AnswerTransfer();
             this.$router.push('/HomeView')
+        },
+
+        AnswerTransfer(){
+            const saveUrl = 'http://localhost:8080/api/user/write';
+
+            const dataToSend = {
+                userList:this.userList
+            }
+
+            for(let i = 0;i<this.question.length;i++){
+                this.userList.push({
+                    qnId:this.questionnaireData.id,
+                    qId:this.question[i].quId,
+                    name:this.userList.name,
+                    phoneNumber:this.userList.phoneNumber,
+                    email:this.userList.email,
+                    age:this.userList.age,
+                    ans:"紅茶"
+                })
+            }
+            fetch(saveUrl, {
+                method: "POST",
+                headers: {
+                "Content-Type": "application/json",
+            },
+            body:JSON.stringify(dataToSend),
+        })
+        .catch((error) => {
+            console.error("Error saving questionnaire:", error);
+            });
+
+            console.log(dataToSend)
+
+
         }
     },
 };
@@ -84,20 +130,20 @@ export default {
         <div class="information">
                 <div class="name">
                     <label for="">姓名</label>
-                    <input type="text" placeholder="請填寫姓名" v-model="personInformation.name">
+                    <input type="text" placeholder="請填寫姓名" v-model="userList.name">
                 </div>
                 <div class="phoneNumber">
                     <label for="">電話號碼</label>
-                    <input type="text" placeholder="請填寫電話" v-model="personInformation.phoneNumber">
+                    <input type="text" placeholder="請填寫電話" v-model="userList.phoneNumber">
                 </div>
 
                 <div class="mail">
                     <label for="">Email</label>
-                    <input type="text" placeholder="請填寫E-mail"  v-model="personInformation.email">
+                    <input type="text" placeholder="請填寫E-mail"  v-model="userList.email">
                 </div>
                 <div class="age">
                     <label for="">年齡</label>
-                    <input type="text" placeholder="請填寫年齡" v-model="personInformation.age">
+                    <input type="text" placeholder="請填寫年齡" v-model="userList.age">
                 </div>
         </div>
 
@@ -117,7 +163,7 @@ export default {
 
             <div class="voteRadio">
                 <div v-for="(qoption,index) in voteQuestion.option.split(';')" :key="index">
-                <input type="radio" value="qoption">
+                <input type="radio" value="qoption" v-model="userList.ans">
                 <label>{{ qoption }}</label>
                 </div>
             </div>
@@ -149,20 +195,20 @@ export default {
         <div class="information1">
                 <div class="name1">
                     <label for="">姓名</label>
-                <p>{{personInformation.name}}</p>
+                <p>{{userList.name}}</p>
                 </div>
                 <div class="phoneNumber1">
                     <label for="">電話號碼</label>
-                    <p>{{personInformation.phoneNumber}}</p>
+                    <p>{{userList.phoneNumber}}</p>
                 </div>
 
                 <div class="mail1">
                     <label for="">Email</label>
-                    <p><p>{{personInformation.email}}</p></p>
+                    <p><p>{{userList.email}}</p></p>
                 </div>
                 <div class="age1">
                     <label for="">年齡</label>
-                    <p>{{personInformation.age}}</p>
+                    <p>{{userList.age}}</p>
                 </div>
         </div>
 
