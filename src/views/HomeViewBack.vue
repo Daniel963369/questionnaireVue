@@ -42,6 +42,7 @@ import deleteConfirmation from './deleteConfirmation.vue'
             this.currentDate =[toyear,tomonth,today].join('-')
 
             this.fetchData();
+            this.timeAnalysis();
         },
         
 
@@ -60,6 +61,21 @@ import deleteConfirmation from './deleteConfirmation.vue'
         },
 
         methods:{
+
+                timeAnalysis(startDate,endDate){
+                    const startDate1 = new Date(startDate)
+                    const endDate1 = new Date(endDate)
+                    const currentDate = new Date()
+                    if(startDate1 > currentDate){
+                        return "尚未開始"
+                    }
+                    else if(endDate1 < currentDate){
+                        return "已結束"
+                    }
+                    else{
+                        return "進行中"
+                    }
+                },
 
                 showConfirmation(){
                     this.showDeleteConfirmation = true
@@ -330,9 +346,7 @@ import deleteConfirmation from './deleteConfirmation.vue'
 
                     <td>
                         <div class="whetherPublished">       
-                            <span v-if="quiz.questionnaire.published && quiz.questionnaire.endDate > currentDate">已截止</span>
-                            <span v-else-if="!quiz.questionnaire.published">未發布</span>
-                            <span v-else>進行中</span>
+                            <p>{{ timeAnalysis(quiz.questionnaire.startDate, quiz.questionnaire.endDate) }}</p>    
                         </div>
                     </td>
                     <div class="questionnaireStartDate">

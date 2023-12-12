@@ -1,9 +1,9 @@
 <script>
+import  Chart  from 'chart.js/auto';
 export default {
     data(){
         return{
             key:0,
-            
             //資料庫問卷及問題的陣列
             quizData:[],
 
@@ -26,13 +26,17 @@ export default {
         }
     },
 
+
+
     mounted(){
         this.fetchData();
+        this.timeAnalysis();
 
+        this.createChart();
+        
     },
 
     computed:{
-
         //分頁控制
         totalPage(){
             return Math.ceil(this.quizData.length/this.perpage)
@@ -50,6 +54,43 @@ export default {
     },
 
     methods:{
+            
+            comeToChart(){
+                this.page = 1
+            },
+            createChart(){;
+            const ctx = document.getElementById('myChart');
+            new Chart(ctx, {
+                type: 'pie',
+                data: {
+                labels: ['麵包超人', '咖哩麵包超人', '吐司超人'],
+                datasets: [{
+                    label: '# of Votes',
+                    data: [30, 40,30 ],
+                    borderWidth: 1
+                }]
+                },
+                options: {
+
+                }
+  });
+            console.log("創建圖表成功")
+        },
+
+            timeAnalysis(startDate,endDate){
+                const startDate1 = new Date(startDate)
+                const endDate1 = new Date(endDate)
+                const currentDate = new Date()
+                if(startDate1 > currentDate){
+                    return "尚未開始"
+                }
+                else if(endDate1 < currentDate){
+                    return "已結束"
+                }
+                else{
+                    return "進行中"
+                }
+            },
 
             //前往後台
             goToBack(){
@@ -182,11 +223,7 @@ export default {
 
                 <td>
                     <div class="whetherPublished">
-                        <span v-if="quiz.questionnaire.published && quiz.questionnaire.endDate < currentDate">已截止</span>
-                        <span v-if="!quiz.questionnaire.published">未發布</span>
-                        <span v-else>進行中</span>
-                        
-                        
+                        <p>{{ timeAnalysis(quiz.questionnaire.startDate, quiz.questionnaire.endDate) }}</p>     
                     </div>
                 </td>
                 <div class="questionnaireStartDate">
@@ -196,7 +233,7 @@ export default {
                     <td>{{ quiz.questionnaire.endDate }}</td>
                 </div>
                 <div class="questionnaireView">
-                    <td>{{ "前往觀看" }}</td>
+                    <td @click="comeToChart">{{ "前往觀看" }}</td>
                 </div>
             </div>
             </tr>
@@ -226,6 +263,9 @@ export default {
     </div>
 </div>
 
+
+
+    <canvas id="myChart"></canvas>
 </template>
 
 

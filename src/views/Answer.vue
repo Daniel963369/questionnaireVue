@@ -46,6 +46,8 @@ export default {
     this.question = serializedObject.question_list || [];
     console.log(this.questionnaireData);
     console.log(this.question);
+
+
     this.userList.qnId = this.questionnaireData.id
     console.log(this.userList.qnId)
 
@@ -54,6 +56,9 @@ export default {
         this.userList.qId = this.question[i].quId
     }
     console.log(this.userList.qId)
+
+
+    console.log(this.userList)
 
 
     
@@ -72,6 +77,7 @@ export default {
             this.AnswerTransfer();
             this.$router.push('/HomeView')
         },
+        
 
         AnswerTransfer(){
             const saveUrl = 'http://localhost:8080/api/user/write';
@@ -88,7 +94,7 @@ export default {
                     phoneNumber:this.userList.phoneNumber,
                     email:this.userList.email,
                     age:this.userList.age,
-                    ans:"紅茶"
+                    ans:this.userList.ans
                 })
             }
             fetch(saveUrl, {
@@ -163,7 +169,7 @@ export default {
 
             <div class="voteRadio">
                 <div v-for="(qoption,index) in voteQuestion.option.split(';')" :key="index">
-                <input type="radio" value="qoption" v-model="userList.ans">
+                <input type="radio" :value="qoption" v-model="userList.ans">
                 <label>{{ qoption }}</label>
                 </div>
             </div>
@@ -222,7 +228,7 @@ export default {
             <div class="voteTitle1">
                 <p>{{ voteQuestion.qTitle }}</p>
                 <p>請投給下列選項:</p>
-                {{ voteQuestion.option }}
+                {{ userList.ans }}
             </div>
 
             <div class="voteRadio1">

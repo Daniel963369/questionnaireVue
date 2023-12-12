@@ -87,6 +87,8 @@ export default{
             this.fetchQuestionList();
         }
 
+        console.log(this.deleteQuestionList)
+
 
 
         
@@ -127,6 +129,15 @@ export default{
 
 
     methods:{
+
+        lookUpdateData(quId){
+            console.log(quId)
+            if(this.qnId >1)
+            this.deleteQuestionList.push({
+                qnId:this.qnId,
+                quId:quId,
+        })
+        },
         updateOrCreate(){
             if(this.qnId >= 1){
                 this.submitUpdateQuestionnaire();
@@ -171,7 +182,7 @@ export default{
             const dataToUpdate = {
                 questionnaire:this.questionnaire,
                 question_list:this.question1,
-                // deleteQuestionList:this.deleteQuestionList
+                deleteQuestionList:this.deleteQuestionList
             };
 
             console.log(dataToUpdate)
@@ -447,7 +458,7 @@ export default{
                 </tr>
                 <tr v-for="(qu,index) in question" :key="index">
                     <div class="idZone">
-                        <input type="checkbox">
+                        <input type="checkbox" @click="lookUpdateData(qu.quId)" >
                         <td>{{ qu.quId }}</td>
                     </div>
                     <td>{{ qu.qTitle }}</td>
