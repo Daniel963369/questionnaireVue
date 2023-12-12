@@ -6,7 +6,7 @@ export default {
             key:0,
             //資料庫問卷及問題的陣列
             quizData:[],
-
+            qnId:"",
             //分頁
             perpage:10,
             currentPage:1,
@@ -23,6 +23,8 @@ export default {
 
             //問題的陣列
             question:[],
+
+            userList:[],
         }
     },
 
@@ -54,10 +56,43 @@ export default {
     },
 
     methods:{
-            
-            comeToChart(){
+
+
+            comeToChart(index){
+                var globalIndex = (this.currentPage-1)*10 +index
+                this.qnId = this.quizData[globalIndex].questionnaire.id
+                console.log(this.qnId)
+                this.fetchUserList();
                 this.page = 1
             },
+
+
+            fetchUserList(){
+            const url = 'http://localhost:8080/api/user/searchUserList';
+            const queryParams = new URLSearchParams({
+                qnId:this.qnId
+            })
+            const urlWithParams = `${url}?${queryParams}`;
+            
+            fetch(urlWithParams, {
+            method: "GET", 
+            headers: new Headers({
+                "Content-Type": "application/json",
+            }),
+            })
+            .then((response) => response.json())
+            .catch((error) => console.error("Error:", error))
+            .then((data) => {
+                console.log(data)
+                this.userList = data.userList
+                console.log(this.userList)
+            });
+            },
+
+
+
+
+
             createChart(){;
             const ctx = document.getElementById('myChart');
             new Chart(ctx, {
@@ -233,7 +268,7 @@ export default {
                     <td>{{ quiz.questionnaire.endDate }}</td>
                 </div>
                 <div class="questionnaireView">
-                    <td @click="comeToChart">{{ "前往觀看" }}</td>
+                    <td @click="comeToChart(index)">{{ "前往觀看" }}</td>
                 </div>
             </div>
             </tr>
