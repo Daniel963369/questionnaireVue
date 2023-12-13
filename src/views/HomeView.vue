@@ -23,8 +23,18 @@ export default {
 
             //問題的陣列
             question:[],
-
+            questionOption:[],
             userList:[],
+            userListAns:[],
+
+            ChartData:{
+                labels:[],
+                datasets:[{
+                    label:'# of Votes',
+                    data:[],
+                    borderWidth:1
+                }]
+            }
         }
     },
 
@@ -34,7 +44,8 @@ export default {
         this.fetchData();
         this.timeAnalysis();
 
-        this.createChart();
+
+
         
     },
 
@@ -63,7 +74,16 @@ export default {
                 this.qnId = this.quizData[globalIndex].questionnaire.id
                 console.log(this.qnId)
                 this.fetchUserList();
+                this.takeQuestion(index);
+                this.createChart();
                 this.page = 1
+            },
+
+            takeQuestion(index){
+                var globalIndex = (this.currentPage-1)*10 +index
+                this.questionOption = this.quizData[globalIndex].question_list[globalIndex].option.split(';')
+                // this.questionOption.push(this.quizData[globalIndex].question_list[globalIndex].option.split(';'))
+                console.log([this.questionOption])
             },
 
 
@@ -85,29 +105,41 @@ export default {
             .then((data) => {
                 console.log(data)
                 this.userList = data.userList
+                let datay = ""
+                this.userList.forEach((user)=>{
+                    console.log(user.ans)
+                    datay = datay + user.ans +';'
+                    this.userListAns.push(user.ans)
+                })
+                console.log(datay)
+                // 針對題目是甚麼
+                // for(let i = 0 ; i<)
                 console.log(this.userList)
+                console.log(this.userListAns)
             });
             },
 
+            calculateVote(){
 
+            },
 
-
-
-            createChart(){;
+            
+            
+            createChart(){
             const ctx = document.getElementById('myChart');
             new Chart(ctx, {
                 type: 'pie',
                 data: {
-                labels: ['麵包超人', '咖哩麵包超人', '吐司超人'],
+                    labels:this.questionOption,
                 datasets: [{
                     label: '# of Votes',
-                    data: [30, 40,30 ],
+                    data: [0,0,2 ],
                     borderWidth: 1
                 }]
                 },
-                options: {
+                // options: {
 
-                }
+                // }
   });
             console.log("創建圖表成功")
         },
@@ -193,6 +225,7 @@ export default {
             .then((response) => {
                 this.quizData = response.quizVoList.filter(quiz => quiz.questionnaire.published);
                 console.log(this.quizData)
+                
             });
             }
     },
