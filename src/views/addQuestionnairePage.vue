@@ -131,6 +131,19 @@ export default{
 
 
     methods:{
+
+         //轉換填寫時間單位
+         formatDate(dateTime) {
+        const formattedDate = new Date(dateTime).toLocaleString('zh-TW', {
+            year: 'numeric',
+            month: 'numeric',
+            day: 'numeric',
+            hour: 'numeric',
+            minute: 'numeric',
+        });
+        return formattedDate;
+        },
+
         fetchUserList(){
             const url = 'http://localhost:8080/api/user/searchUserList';
             const queryParams = new URLSearchParams({
@@ -589,7 +602,7 @@ export default{
             <tr v-for="(item,index) in userList" :key="index">
                 <td>{{ item.num }}</td>
                 <td>{{ item.name }}</td>
-                <td>{{ item.dateTime }}</td>
+                <td>{{ formatDate(item.dateTime) }}</td>
                 <td>{{ "前往" }}</td>
 
             </tr>
