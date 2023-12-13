@@ -130,6 +130,11 @@ export default{
 
     methods:{
 
+
+        goToFeedbackPage(){
+            this.controlPage = 3
+        },
+
         lookUpdateData(quId){
             console.log(quId)
             if(this.qnId >1)
@@ -342,7 +347,7 @@ export default{
     <div class="title">
         <p>問卷</p>
         <p>題目</p>
-        <p>問卷回饋</p>
+        <p @click="goToFeedbackPage">問卷回饋</p>
         <p>統計</p>
     </div>
         
@@ -544,6 +549,14 @@ export default{
         <button type="button" @click="updateOrCreate">儲存並發布</button>
     </div>
 
+</div>
+
+
+<div class="feedbackPage" v-if="controlPage == 3">
+    <p>編號</p>
+    <p>姓名</p>
+    <p>填寫時間</p>
+    <p>觀看回覆</p>
 </div>
 
 
@@ -836,6 +849,11 @@ export default{
         margin-top:3%;
     }
 
+}
+
+.feedbackPage{
+    display:flex;
+    justify-content:space-around;
 }
 
 
