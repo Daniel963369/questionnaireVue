@@ -58,7 +58,9 @@ export default{
             },
             question1:[],
 
-            controlPage:0
+            controlPage:0,
+
+            userList:[]
         }
     },
     components:{
@@ -129,9 +131,30 @@ export default{
 
 
     methods:{
-
+        fetchUserList(){
+            const url = 'http://localhost:8080/api/user/searchUserList';
+            const queryParams = new URLSearchParams({
+                qnId:this.qnId
+            })
+            const urlWithParams = `${url}?${queryParams}`;
+            
+            fetch(urlWithParams, {
+            method: "GET", 
+            headers: new Headers({
+                "Content-Type": "application/json",
+            }),
+            })
+            .then((response) => response.json())
+            .catch((error) => console.error("Error:", error))
+            .then((data) => {
+                console.log(data)
+                this.userList = data.userList
+                console.log(this.userList)
+            });
+            },
 
         goToFeedbackPage(){
+            this.fetchUserList();
             this.controlPage = 3
         },
 
@@ -553,10 +576,25 @@ export default{
 
 
 <div class="feedbackPage" v-if="controlPage == 3">
-    <p>編號</p>
-    <p>姓名</p>
-    <p>填寫時間</p>
-    <p>觀看回覆</p>
+
+    <div class="feedbackZone">
+        <table>
+            <tr>
+                <td>編號</td>
+                <td>姓名</td>
+                <td>填寫時間</td>
+                <td>觀看回覆</td>
+            </tr>
+
+            <tr v-for="(item,index) in userList" :key="index">
+                <td>{{ item.num }}</td>
+                <td>{{ item.name }}</td>
+                <td>{{ item.dateTime }}</td>
+                <td>{{ "前往" }}</td>
+
+            </tr>
+        </table>
+    </div>
 </div>
 
 
