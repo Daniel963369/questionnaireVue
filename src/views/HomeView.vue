@@ -27,14 +27,8 @@ export default {
             userList:[],
             userListAns:[],
 
-            ChartData:{
-                labels:[],
-                datasets:[{
-                    label:'# of Votes',
-                    data:[],
-                    borderWidth:1
-                }]
-            }
+            voters:[],
+
         }
     },
 
@@ -44,9 +38,6 @@ export default {
         this.fetchData();
         this.timeAnalysis();
 
-
-
-        
     },
 
     computed:{
@@ -67,23 +58,47 @@ export default {
     },
 
     methods:{
-
-
+            
+        
             comeToChart(index){
                 var globalIndex = (this.currentPage-1)*10 +index
                 this.qnId = this.quizData[globalIndex].questionnaire.id
                 console.log(this.qnId)
-                this.fetchUserList();
-                this.takeQuestion(index);
-                this.createChart();
-                this.page = 1
+                this.fetchUserList()
+                .then(() => {
+                    this.takeQuestion(index);
+                    this.takeAnsCounts();
+                    this.createChart();
+                    this.page = 1
+                })
             },
 
             takeQuestion(index){
                 var globalIndex = (this.currentPage-1)*10 +index
-                this.questionOption = this.quizData[globalIndex].question_list[globalIndex].option.split(';')
+                this.questionOption = this.quizData[globalIndex].question_list[0].option.split(';')
                 // this.questionOption.push(this.quizData[globalIndex].question_list[globalIndex].option.split(';'))
                 console.log([this.questionOption])
+            },
+
+            takeAnsCounts(){
+                const optionCounts = []
+                this.userListAns.forEach((ans)=>{
+                    const options = ans.split(';')
+
+
+                    options.forEach((option)=>{
+                        const optionName = option.replace(/[(（].*?[)）]/g, '').trim();
+                        if(optionCounts[option]){
+                            optionCounts[option]++;
+                        }else{
+                            optionCounts[option] = 1
+                        }
+                        console.log(optionName)
+                    })
+                })
+                this.voters = Object.values(optionCounts);
+                console.log(this.voters)
+                console.log(optionCounts)
             },
 
 
@@ -94,7 +109,7 @@ export default {
             })
             const urlWithParams = `${url}?${queryParams}`;
             
-            fetch(urlWithParams, {
+            return fetch(urlWithParams, {
             method: "GET", 
             headers: new Headers({
                 "Content-Type": "application/json",
@@ -112,28 +127,22 @@ export default {
                     this.userListAns.push(user.ans)
                 })
                 console.log(datay)
-                // 針對題目是甚麼
-                // for(let i = 0 ; i<)
                 console.log(this.userList)
                 console.log(this.userListAns)
             });
             },
 
-            calculateVote(){
-
-            },
-
-            
-            
+                        
             createChart(){
             const ctx = document.getElementById('myChart');
+    
             new Chart(ctx, {
                 type: 'pie',
                 data: {
                     labels:this.questionOption,
                 datasets: [{
-                    label: '# of Votes',
-                    data: [0,0,2 ],
+                    label: '投票數量',
+                    data:this.voters,
                     borderWidth: 1
                 }]
                 },
@@ -334,6 +343,9 @@ export default {
 
 
     <canvas id="myChart"></canvas>
+
+    <div v-if="page == 1">
+    </div>
 </template>
 
 
