@@ -362,7 +362,9 @@ export default {
 
 
 
-    <canvas id="myChart"></canvas>
+    <div class="mychartZone">
+        <canvas id="myChart"></canvas>
+    </div>
 
     <div v-if="page == 1">
 
@@ -374,7 +376,7 @@ export default {
 .body{
     width:100%;
     height:100%;
-    background-color:darkcyan;
+    background-color:#EEB8B8;
 .header{
     width:100vw;
     height:10vh;
@@ -390,7 +392,7 @@ export default {
         animation-name:neon;
         animation-duration:2s;
         animation-iteration-count:infinite;
-        color:white;
+        color:#C5DAD1;
     }
     @keyframes neon {
         0%{color:green;text-shadow:0px 0px 20px yellow;}
@@ -408,7 +410,7 @@ export default {
         display:flex;
         top:20%;
         font-size:17pt;
-        color:white;
+        color:#C5DAD1;
         
 
         i{
@@ -477,7 +479,7 @@ export default {
                 justify-content:space-around;
                 border:1px solid black;
                 width:90vw;
-                color:white;
+                color:#7E30E1;
 
                 .qnId{
                     width:15%;
@@ -549,14 +551,14 @@ export default {
                     td{
                         width:13.5vw;
                         text-align:center;
-                        color:white;
+                        color:#7E30E1;
 
                     }
                 }
 
                 .questionnaireTitle{
                     width:22.5vw;
-                    color:white;
+                    color:#7E30E1;
                     
                     
                     td{
@@ -572,13 +574,13 @@ export default {
                     
                     p{
                         
-                        color:white;
+                        color:#7E30E1;
                         text-align:center;
                     }
                 }
 
                 .questionnaireStartDate{
-                    color:white;
+                    color:#7E30E1;
                     width:13.5vw;
                     td{
                         width:13.5vw;
@@ -587,7 +589,7 @@ export default {
                 }
 
                 .questionnaireEndDate{
-                    color:white;
+                    color:#7E30E1;
                     width:13.5vw;
                     td{
                         width:13.5vw;
@@ -601,7 +603,7 @@ export default {
                     td{
                         width:9vw;
                         text-align: center;
-                        color:white;
+                        color:#7E30E1;
                     }
                 }
             }
@@ -632,6 +634,11 @@ export default {
             
         }
     }
+}
+
+.mychartZone{
+    width:400px;
+    height:400px;
 }
 
 

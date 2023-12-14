@@ -252,7 +252,7 @@ export default {
 .answerZone{
     width:100%;
     height:100%;
-    background-color:darkcyan;
+    background-color:#EEB8B8;
 
     .questionnaireData{
         width:100%;
@@ -260,7 +260,7 @@ export default {
 
         .questionnaireTime{
             font-size:18pt;
-            color:beige;
+            color:#7E30E1;
             display:flex;
             width:100%;
             margin-left:80%;
@@ -269,13 +269,13 @@ export default {
         .questionnaireTitle{
             text-align:center;
             font-size:26pt;
-            color:beige;
+            color:#7E30E1;
             font-weight:bold;
         }
 
         .questionnaireDesp{
             font-size:16pt;
-            color:beige;
+            color:#7E30E1;
             text-align:center;
         }
     }
@@ -288,13 +288,13 @@ export default {
 
             .voteTitle{
                 text-align:center;
-                color:beige;
+                color:#7E30E1;
             }
             .voteRadio{
                 width:100vw;
                 display:flex;
                 flex-direction:column;
-                color:beige;
+                color:#7E30E1;
                 margin-bottom:3%;
             }
         }
@@ -309,22 +309,22 @@ export default {
         
         .name{
             margin-bottom:1%;
-            color:beige;
+            color:#7E30E1;
         }
         .phoneNumber{
             margin-right:2%;
             margin-bottom:1%;
-            color:beige;
+            color:#7E30E1;
         }
 
         .mail{
             margin-right:0.5%;
             margin-bottom:1%;
-            color:beige;
+            color:#7E30E1;
         }
 
         .age{
-            color:beige;
+            color:#7E30E1;
         }
     }
 
@@ -333,7 +333,7 @@ export default {
     .reasonZone{
         text-align:center;
         margin-top:2%;
-        color:beige;
+        color:#7E30E1;
         p{
             margin-left:2%;
         }
@@ -348,7 +348,7 @@ export default {
         margin-top:3%;
         button{
             width:5vw;
-            background-color:blue;
+            background-color:purple;
             color:white;
         }
     }
@@ -358,7 +358,7 @@ export default {
 .checkAnswerZone{
     width:100%;
     height:100%;
-    background-color:darkcyan;
+    background-color:#EEB8B8;
 
         .questionnaireData1{
             width:100%;
@@ -366,7 +366,7 @@ export default {
 
         .questionnaireTime1{
             font-size:18pt;
-            color:beige;
+            color:#7E30E1;
             display:flex;
             width:100%;
             margin-left:80%;
@@ -375,13 +375,13 @@ export default {
         .questionnaireTitle1{
             text-align:center;
             font-size:26pt;
-            color:beige;
+            color:#7E30E1;
             font-weight:bold;
         }
 
         .questionnaireDesp1{
             font-size:16pt;
-            color:beige;
+            color:#7E30E1;
             text-align:center;
         }
     }
@@ -395,31 +395,31 @@ export default {
             
             .name1{
                 margin-bottom:1%;
-                color:beige;
+                color:#7E30E1;
             }
             .phoneNumber1{
                 margin-right:2%;
                 margin-bottom:1%;
-                color:beige;
+                color:#7E30E1;
             }
 
             .mail1{
                 margin-right:0.5%;
                 margin-bottom:1%;
-                color:beige;
+                color:#7E30E1;
             }
 
             .age1{
                 margin-right:0.5%;
                 margin-bottom:1%;
-                color:beige;
+                color:#7E30E1;
             }
         }
 
         .reasonZone1{
             text-align:center;
             margin-top:2%;
-            color:beige;
+            color:#7E30E1;
         }
 
         
@@ -431,13 +431,13 @@ export default {
 
             .voteTitle1{
                 text-align:center;
-                color:beige;
+                color:#7E30E1;
             }
             .voteRadio1{
                 width:100vw;
                 display:flex;
                 flex-direction:column;
-                color:beige;
+                color:#7E30E1;
                 margin-bottom:3%;
             }
         }

@@ -659,7 +659,7 @@ export default{
 .body{
     width:100vw;
     height:100vh;
-    background-color:darkcyan;
+    background-color:#EEB8B8;
     position: relative;
 
 
@@ -755,7 +755,7 @@ export default{
 }
 
 .quZone{
-    background-color:darkcyan;
+    background-color:#EEB8B8;
     width:100vw;
     height:100vh;
     .quheader{
@@ -842,7 +842,7 @@ export default{
             display:flex;
             margin-top:2%;
             justify-content:space-around;
-            background-color:darkcyan;
+            background-color:#EEB8B8;
             width:60%;
             margin:0 20%;
 
@@ -965,7 +965,7 @@ export default{
 .checkZone{
     width:100%;
     height:100%;
-    background-color:darkcyan;
+    background-color:#EEB8B8;
 
     .checkTimeZone{
         display:flex;
