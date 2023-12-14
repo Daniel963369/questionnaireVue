@@ -44,6 +44,7 @@ export default{
             option:"",
 
             showDeleteConfirmation:false,
+            indexArr:[],
 
             question:[],
 
@@ -491,24 +492,44 @@ export default{
         <div class="deleteheader">
             <table>
                 <tr>
-                    <td>編號</td>
-                    <td>內容</td>
-                    <td>問題種類</td>
-                    <td>必填</td>
-                    <td>編輯</td>
+                    <div class="deleteNumber">
+                        <td>編號</td>
+                    </div>
+                    <div class="deleteContent">
+                        <td>內容</td>
+                    </div>
+                    <div class="deleteSort">
+                        <td>問題種類</td>
+                    </div>
+                    <div class="deleteNecessary">
+                        <td>必填</td>
+                    </div>
+                    <div class="deleteEdit">
+                        <td>編輯</td>
+                    </div>
                 </tr>
                 <tr v-for="(qu,index) in question" :key="index">
+                    <div class="answerTr">
                     <div class="idZone">
                         <input type="checkbox" @click="lookUpdateData(qu.quId)" >
                         <td>{{ qu.quId }}</td>
                     </div>
-                    <td>{{ qu.qTitle }}</td>
-                    <td>{{ qu.optionType }}</td>
-                    <td>
-                        <span v-if="qu.isNecessary">是</span>
-                        <span v-else>否</span>
-                    </td>
-                    <td>{{"編輯"}}</td>
+                    <div class="titleZone">
+                        <td>{{ qu.qTitle }}</td>
+                    </div>
+                    <div class="sortZone">
+                        <td>{{ qu.optionType }}</td>
+                    </div>
+                    <div class="necessaryZone">
+                        <td>
+                            <span v-if="qu.necessary == true">是</span>
+                            <span v-else>否</span>
+                        </td>
+                    </div>
+                    <div class="editZone">
+                        <td>{{"編輯"}}</td>
+                    </div>
+                </div>
                 </tr>
             </table>
         </div>
@@ -592,18 +613,37 @@ export default{
 
     <div class="feedbackZone">
         <table>
+        <div class="feedbackHeader">
             <tr>
-                <td>編號</td>
-                <td>姓名</td>
-                <td>填寫時間</td>
-                <td>觀看回覆</td>
+                <div class="feedbackNumber">
+                    <td>編號</td>
+                </div>
+                <div class="feedbackName">
+                    <td>姓名</td>
+                </div>
+                <div class="feedbackTime">
+                    <td>填寫時間</td>
+                </div>
+                <div class="feedbackRespond">
+                    <td>觀看回覆</td>
+                </div>
             </tr>
-
+        </div>
             <tr v-for="(item,index) in userList" :key="index">
-                <td>{{ item.num }}</td>
-                <td>{{ item.name }}</td>
-                <td>{{ formatDate(item.dateTime) }}</td>
-                <td>{{ "前往" }}</td>
+                <div class="userZone">
+                    <div class="userNum">
+                        <td>{{ item.num }}</td>
+                    </div>
+                    <div class="userName">
+                        <td>{{ item.name }}</td>
+                    </div>
+                    <div class="userTime">
+                        <td>{{ formatDate(item.dateTime) }}</td>
+                    </div>
+                    <div class="userRespond">
+                        <td>{{ "前往" }}</td>
+                    </div>
+                </div>
 
             </tr>
         </table>
@@ -814,14 +854,107 @@ export default{
                     border:1px solid black;
                     display:flex;
                     justify-content:space-around;
+
+                    .deleteNumber{
+                        width:10%;
+                        border:1px solid black;
+                        
+                        td{
+                            display:flex;
+                            justify-content: center;
+                        }
+                    }
+
+                    .deleteContent{
+                        width:25%;
+                        border:1px solid black;
+
+                        td{
+                            display:flex;
+                            justify-content: center;
+                        }
+                    }
+
+                    .deleteSort{
+                        width:15%;
+                        border:1px solid black;
+
+                        td{
+                            display:flex;
+                            justify-content: center;
+                        }
+                    }
+
+                    .deleteNecessary{
+                        width:15%;
+                        border:1px solid black;
+
+                        td{
+                            display:flex;
+                            justify-content: center;
+                        }
+                    }
+                    .deleteEdit{
+                        width:15%;
+                        border:1px solid black;
+
+                        td{
+                            display:flex;
+                            justify-content: center;
+                        }
+                    }
+
+                    
                 }
+            .answerTr{
+                width:100%;
+                border:1px solid black;
+                display:flex;
+                justify-content:space-around;
+            
+            
+            .idZone{
+                width:10%;
+                border:1px solid black;
+                display:flex;
+                justify-content:center;
+                
+            }
+            .titleZone{
+                width:25%;
+                border:1px solid black;
+                display:flex;
+                justify-content:center;
+
+                
             }
 
-            .idZone{
-                display: flex;
+            .sortZone{
+                width:15%;
+                border:1px solid black;
+                display:flex;
+                justify-content:center;
+
             }
+
+            .necessaryZone{
+                width:15%;
+                border:1px solid black;
+                display:flex;
+                justify-content:center;
+
+            }
+            .editZone{
+                width:15%;
+                border:1px solid black;
+                display:flex;
+                justify-content:center;
+            }
+            
+        }
         }
     }
+}
 
     .quButtonZone{
         margin-top:3%;
@@ -903,8 +1036,98 @@ export default{
 }
 
 .feedbackPage{
+    background-color:purple;
+    width:100vw;
+    height:100%;
     display:flex;
     justify-content:space-around;
+
+    table{
+        width:70vw;
+        margin:0 15vw;
+        height:100%;
+
+        .feedbackHeader{
+            display:flex;
+            width:100%;
+            border:1px solid white;
+            justify-content:space-around;
+
+            .feedbackNumber{
+                width:10%;
+                border:1px solid white;
+                color:white;
+                justify-content:center;
+                display:flex;
+            }
+
+            
+            .feedbackName{
+                width:15%;
+                border:1px solid white;
+                color:white;
+                justify-content:center;
+                display:flex;
+            }
+
+            .feedbackTime{
+                width:25%;
+                border:1px solid white;
+                color:white;
+                justify-content:center;
+                display:flex;
+            }
+
+            
+            .feedbackRespond{
+                width:10%;
+                border:1px solid white;
+                color:white;
+                justify-content:center;
+                display:flex;
+            }
+        }
+        .userZone{
+            display:flex;
+            width:100%;
+
+            border:1px solid white;
+            justify-content:space-around;
+            color:white;
+
+            .userNum{
+                width:10%;
+                border:1px solid white;
+                color:white;
+                justify-content:center;
+                display:flex;
+            }
+
+            .userName{
+                width:15%;
+                border:1px solid white;
+                color:white;
+                justify-content:center;
+                display:flex;
+            }
+
+            .userTime{
+                width:25%;
+                border:1px solid white;
+                color:white;
+                justify-content:center;
+                display:flex;
+            
+            }
+            .userRespond{
+                width:10%;
+                border:1px solid white;
+                color:white;
+                justify-content:center;
+                display:flex;
+            }
+        }
+    }
 }
 
 

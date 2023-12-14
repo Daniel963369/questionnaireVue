@@ -1,5 +1,4 @@
     <script>
-    import AddQuestionnairePage from './addQuestionnairePage.vue'
 import deleteConfirmation from './deleteConfirmation.vue'
     export default {
         data(){
@@ -61,6 +60,7 @@ import deleteConfirmation from './deleteConfirmation.vue'
         },
 
         methods:{
+
 
                 timeAnalysis(startDate,endDate){
                     const startDate1 = new Date(startDate)
@@ -506,7 +506,7 @@ import deleteConfirmation from './deleteConfirmation.vue'
                 justify-content:space-around;
                 border:1px solid black;
                 width:90vw;
-                color:blue;
+                color:white;
 
                 .qnId{
                     width:15%;
@@ -584,14 +584,14 @@ import deleteConfirmation from './deleteConfirmation.vue'
                     td{
                         width:5vw;
                         text-align:center;
-                        color:blue;
+                        color:white;
 
                     }
                 }
 
                 .questionnaireTitle{
                     width:22.5vw;
-                    color:blue;
+                    color:white;
                     
                     
                     td{
@@ -605,15 +605,15 @@ import deleteConfirmation from './deleteConfirmation.vue'
                     display:flex;
                     justify-content: center;
                     
-                    span{
+                    p{
                         
-                        color:blue;
+                        color:white;
                         text-align:center;
                     }
                 }
 
                 .questionnaireStartDate{
-                    color:blue;
+                    color:white;
                     width:13.5vw;
                     td{
                         width:13.5vw;
@@ -622,7 +622,7 @@ import deleteConfirmation from './deleteConfirmation.vue'
                 }
 
                 .questionnaireEndDate{
-                    color:blue;
+                    color:white;
                     width:13.5vw;
                     td{
                         width:13.5vw;
@@ -636,7 +636,7 @@ import deleteConfirmation from './deleteConfirmation.vue'
                     td{
                         width:9vw;
                         text-align: center;
-                        color:blue;
+                        color:white;
                     }
                 }
             }

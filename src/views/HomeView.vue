@@ -58,11 +58,25 @@ export default {
     },
 
     methods:{
+
+            isQuestionnaireEnded(endDate) {
+                const currentDate = new Date();
+                const questionnaireEndDate = new Date(endDate);
+
+                return questionnaireEndDate < currentDate;
+            },
             
         
             comeToChart(index){
                 var globalIndex = (this.currentPage-1)*10 +index
                 this.qnId = this.quizData[globalIndex].questionnaire.id
+
+            // 添加条件检查，如果问卷已结束，则不执行后续逻辑
+            if (this.isQuestionnaireEnded(this.quizData[globalIndex].questionnaire.endDate)) {
+                    // 在这里可以添加一些提示，告知用户该问卷已结束
+                    console.log("問卷已經結束,不能觀看統計資料");
+                    return;
+            }
                 console.log(this.qnId)
                 this.fetchUserList()
                 .then(() => {
@@ -191,6 +205,12 @@ export default {
 
 
             goToQuestion(quiz) {
+            // 添加条件检查，如果问卷已结束，则不执行后续逻辑
+                if (this.isQuestionnaireEnded(quiz.questionnaire.endDate)) {
+                        // 在这里可以添加一些提示，告知用户该问卷已结束
+                        console.log("問卷截止,禁止進入");
+                        return;
+                }
                 this.$router.push({
                     name: 'Answer',
                     params: {
@@ -345,6 +365,7 @@ export default {
     <canvas id="myChart"></canvas>
 
     <div v-if="page == 1">
+
     </div>
 </template>
 
@@ -456,7 +477,7 @@ export default {
                 justify-content:space-around;
                 border:1px solid black;
                 width:90vw;
-                color:blue;
+                color:white;
 
                 .qnId{
                     width:15%;
@@ -528,14 +549,14 @@ export default {
                     td{
                         width:13.5vw;
                         text-align:center;
-                        color:blue;
+                        color:white;
 
                     }
                 }
 
                 .questionnaireTitle{
                     width:22.5vw;
-                    color:blue;
+                    color:white;
                     
                     
                     td{
@@ -549,15 +570,15 @@ export default {
                     display:flex;
                     justify-content: center;
                     
-                    span{
+                    p{
                         
-                        color:blue;
+                        color:white;
                         text-align:center;
                     }
                 }
 
                 .questionnaireStartDate{
-                    color:blue;
+                    color:white;
                     width:13.5vw;
                     td{
                         width:13.5vw;
@@ -566,7 +587,7 @@ export default {
                 }
 
                 .questionnaireEndDate{
-                    color:blue;
+                    color:white;
                     width:13.5vw;
                     td{
                         width:13.5vw;
@@ -580,7 +601,7 @@ export default {
                     td{
                         width:9vw;
                         text-align: center;
-                        color:blue;
+                        color:white;
                     }
                 }
             }
