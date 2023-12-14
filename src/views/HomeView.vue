@@ -641,8 +641,4 @@ export default {
     height:400px;
 }
 
-
-
-
-
 </style>
